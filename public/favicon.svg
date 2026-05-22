@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 115">
+  <!-- Outer shield (grey border) -->
+  <path d="M50 4 L92 20 L92 58 C92 83 73 102 50 110 C27 102 8 83 8 58 L8 20 Z" fill="#8a8a8a"/>
+  <!-- Inner shield (red fill) -->
+  <path d="M50 12 L85 26 L85 58 C85 79 68 96 50 104 C32 96 15 79 15 58 L15 26 Z" fill="#d42026"/>
+  <!-- Circuit traces (white) -->
+  <line x1="35" y1="38" x2="35" y2="54" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <line x1="35" y1="46" x2="50" y2="46" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <line x1="50" y1="36" x2="50" y2="68" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <line x1="50" y1="56" x2="65" y2="56" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <line x1="65" y1="44" x2="65" y2="68" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="35" cy="62" r="4" fill="white"/>
+  <circle cx="50" cy="34" r="4" fill="white"/>
+  <circle cx="65" cy="42" r="4" fill="white"/>
+</svg>

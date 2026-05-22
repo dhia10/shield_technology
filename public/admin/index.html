@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Ange Gardien</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --blue:    #0d1b4b;
+      --blue2:   #1a3272;
+      --orange:  #ff6f00;
+      --orange2: #ff8f00;
+      --steel:   #37474f;
+      --white:   #ffffff;
+      --bg:      #f0f2f5;
+      --card:    #ffffff;
+      --border:  #e0e4ea;
+      --text:    #212121;
+      --muted:   #607d8b;
+      --success: #2e7d32;
+      --danger:  #c62828;
+      --warn:    #e65100;
+      --info:    #0277bd;
+      --sidebar-w: 260px;
+      --header-h:  64px;
+      --radius:  10px;
+      --shadow:  0 2px 12px rgba(0,0,0,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; border: none; outline: none; }
+    input, select, textarea { font-family: inherit; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w); background: var(--blue); color: #fff;
+      display: flex; flex-direction: column; height: 100vh; overflow-y: auto;
+      transition: width 0.3s; position: fixed; left: 0; top: 0; z-index: 100;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+    }
+    .sidebar-logo {
+      padding: 20px 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .sidebar-logo-icon { width: 40px; height: 40px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .sidebar-logo-text { font-size: 1.05rem; font-weight: 800; }
+    .sidebar-logo-sub { font-size: 0.7rem; color: rgba(255,255,255,0.5); letter-spacing: 1px; }
+    .sidebar-role { padding: 12px 20px; font-size: 0.75rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
+    .sidebar-nav { flex: 1; padding: 0 10px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px; padding: 11px 14px;
+      border-radius: 8px; margin-bottom: 3px; font-size: 0.9rem;
+      color: rgba(255,255,255,0.75); transition: all 0.2s; cursor: pointer;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .nav-item.active { background: var(--orange); color: #fff; font-weight: 600; }
+    .nav-item i { width: 18px; text-align: center; }
+    .sidebar-footer { padding: 16px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .sidebar-user { display: flex; align-items: center; gap: 10px; }
+    .sidebar-avatar { width: 36px; height: 36px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .sidebar-user-name { font-size: 0.85rem; font-weight: 600; }
+    .sidebar-user-role { font-size: 0.7rem; color: rgba(255,255,255,0.5); }
+    .sidebar-logout { margin-left: auto; background: rgba(255,255,255,0.1); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: 0.2s; }
+    .sidebar-logout:hover { background: var(--danger); }
+
+    /* ── MAIN ── */
+    .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    .topbar {
+      height: var(--header-h); background: var(--card); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 28px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.06); flex-shrink: 0;
+    }
+    .topbar-title { font-size: 1.1rem; font-weight: 800; color: var(--blue); }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .topbar-btn { background: var(--bg); border: 1px solid var(--border); padding: 7px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; transition: 0.2s; }
+    .topbar-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .content { flex: 1; overflow-y: auto; padding: 28px; }
+
+    /* ── CARDS ── */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 28px; }
+    .stat-card {
+      background: var(--card); border-radius: var(--radius); padding: 22px 20px;
+      box-shadow: var(--shadow); border-left: 4px solid transparent; display: flex; align-items: center; gap: 16px;
+    }
+    .stat-card--blue { border-left-color: var(--blue2); }
+    .stat-card--orange { border-left-color: var(--orange); }
+    .stat-card--green { border-left-color: var(--success); }
+    .stat-card--red { border-left-color: var(--danger); }
+    .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .stat-icon--blue { background: #e8eaf6; }
+    .stat-icon--orange { background: #fff3e0; }
+    .stat-icon--green { background: #e8f5e9; }
+    .stat-icon--red { background: #ffebee; }
+    .stat-num { font-size: 1.7rem; font-weight: 900; color: var(--blue); }
+    .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+    .stat-sub { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+    /* ── TABLES ── */
+    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 24px; }
+    .card-header { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .card-title { font-size: 1rem; font-weight: 800; color: var(--blue); }
+    .card-body { padding: 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    thead th { background: #f8f9fb; padding: 12px 16px; text-align: left; font-weight: 700; color: var(--steel); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+    tbody td { padding: 13px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: #fafbfc; }
+
+    /* ── BADGES ── */
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; }
+    .badge-green { background: #e8f5e9; color: var(--success); }
+    .badge-orange { background: #fff3e0; color: var(--warn); }
+    .badge-blue { background: #e3f2fd; color: var(--info); }
+    .badge-red { background: #ffebee; color: var(--danger); }
+    .badge-grey { background: #f5f5f5; color: var(--muted); }
+    .badge-purple { background: #f3e5f5; color: #7b1fa2; }
+
+    /* ── BUTTONS ── */
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; transition: 0.2s; }
+    .btn-primary { background: var(--orange); color: #fff; }
+    .btn-primary:hover { background: var(--orange2); }
+    .btn-secondary { background: var(--blue); color: #fff; }
+    .btn-secondary:hover { background: var(--blue2); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover { background: #b71c1c; }
+    .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--steel); }
+    .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+    .btn-sm { padding: 5px 10px; font-size: 0.78rem; }
+    .btn-xs { padding: 3px 8px; font-size: 0.72rem; }
+    .btn-icon { width: 32px; height: 32px; padding: 0; justify-content: center; border-radius: 8px; }
+
+    /* ── FORMS ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label { font-size: 0.8rem; font-weight: 700; color: var(--steel); }
+    .form-control { padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.875rem; transition: 0.2s; background: var(--white); }
+    .form-control:focus { border-color: var(--orange); outline: none; box-shadow: 0 0 0 3px rgba(255,111,0,0.1); }
+    .form-control[type="file"] { padding: 6px 10px; }
+
+    /* ── MODAL ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+    .modal-overlay.hidden { display: none; }
+    .modal { background: var(--card); border-radius: 14px; width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.25); animation: fadeUp 0.25s ease; }
+    .modal-lg { max-width: 860px; }
+    .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .modal-title { font-size: 1.05rem; font-weight: 800; color: var(--blue); }
+    .modal-close { width: 30px; height: 30px; background: var(--bg); border-radius: 50%; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; }
+    .modal-close:hover { background: var(--danger); color: #fff; }
+    .modal-body { padding: 24px; }
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+    @keyframes fadeUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    /* ── TOAST ── */
+    .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+    .toast { background: var(--blue); color: #fff; padding: 12px 18px; border-radius: 10px; font-size: 0.875rem; min-width: 260px; border-left: 4px solid var(--orange); animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 8px; }
+    .toast-success { border-left-color: var(--success); }
+    .toast-danger { border-left-color: var(--danger); }
+    @keyframes slideIn { from { transform: translateX(110%); } to { transform: translateX(0); } }
+
+    /* ── SEARCH / FILTER BAR ── */
+    .toolbar { display: flex; align-items: center; gap: 10px; padding: 16px 22px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .search-box { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 7px 12px; flex: 1; min-width: 180px; }
+    .search-box input { border: none; background: transparent; font-size: 0.875rem; outline: none; width: 100%; }
+    .search-box i { color: var(--muted); }
+
+    /* ── SECTION PAGES ── */
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    /* ── MISC ── */
+    .empty-state { text-align: center; padding: 48px 20px; color: var(--muted); }
+    .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+    .product-thumb { width: 42px; height: 42px; object-fit: cover; border-radius: 6px; }
+    .tag { display: inline-block; padding: 2px 8px; background: var(--bg); border-radius: 4px; font-size: 0.72rem; color: var(--muted); margin: 2px; }
+    .chart-bar-wrap { margin-top: 16px; }
+    .chart-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.82rem; }
+    .chart-bar-label { width: 120px; color: var(--muted); flex-shrink: 0; }
+    .chart-bar-bg { flex: 1; background: var(--bg); border-radius: 4px; height: 10px; overflow: hidden; }
+    .chart-bar-fill { height: 100%; border-radius: 4px; background: var(--orange); }
+    .chart-bar-val { width: 60px; text-align: right; font-weight: 700; color: var(--blue); }
+
+    /* Responsive */
+    @media (max-width: 1200px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .stat-grid { grid-template-columns: 1fr 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ LOGIN SCREEN ══ -->
+<div id="loginScreen" style="position:fixed;inset:0;background:linear-gradient(135deg,#0d1b4b,#1a3272);display:flex;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:#fff;border-radius:16px;padding:40px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="text-align:center;margin-bottom:28px;">
+      <div style="width:60px;height:60px;background:#ff6f00;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 12px;">🛡️</div>
+      <h1 style="font-size:1.4rem;font-weight:900;color:#0d1b4b;">Administration</h1>
+      <p style="color:#607d8b;font-size:0.9rem;">Ange Gardien — Tableau de bord</p>
+    </div>
+    <form onsubmit="adminLogin(event)">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div>
+          <label style="font-size:0.8rem;font-weight:700;color:#37474f;display:block;margin-bottom:4px;">Email</label>
+          <input type="email" id="admin-email" class="form-control" required placeholder="admin@shieldtechnology.tn" style="width:100%;" />
+        </div>
+        <div>
+          <label style="font-size:0.8rem;font-weight:700;color:#37474f;display:block;margin-bottom:4px;">Mot de passe</label>
+          <input type="password" id="admin-pwd" class="form-control" required placeholder="••••••••" style="width:100%;" />
+        </div>
+        <button type="submit" style="background:#ff6f00;color:#fff;padding:12px;border-radius:8px;font-weight:700;font-size:1rem;width:100%;border:none;cursor:pointer;margin-top:4px;">
+          🔑 Connexion Admin
+        </button>
+        <div id="loginError" style="color:#c62828;font-size:0.85rem;text-align:center;display:none;"></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon">🛡️</div>
+    <div>
+      <div class="sidebar-logo-text">Ange Gardien</div>
+      <div class="sidebar-logo-sub">ADMIN PANEL</div>
+    </div>
+  </div>
+
+  <div class="sidebar-role">Menu Principal</div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" onclick="navTo('dashboard')"><i class="fa fa-chart-pie"></i> Tableau de bord</div>
+    <div class="nav-item" onclick="navTo('orders')"><i class="fa fa-shopping-bag"></i> Commandes</div>
+    <div class="nav-item" onclick="navTo('products')"><i class="fa fa-box"></i> Produits</div>
+    <div class="nav-item" onclick="navTo('users')"><i class="fa fa-users"></i> Utilisateurs</div>
+    <div class="nav-item" onclick="navTo('coupons')"><i class="fa fa-tag"></i> Coupons</div>
+    <div class="sidebar-role" style="margin-top:16px;">Super Admin</div>
+    <div class="nav-item" onclick="navTo('admins')"><i class="fa fa-user-shield"></i> Gérer les admins</div>
+    <div class="nav-item" onclick="window.open('/','_blank')"><i class="fa fa-globe"></i> Voir le site</div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">👤</div>
+      <div>
+        <div class="sidebar-user-name" id="sidebarName">Admin</div>
+        <div class="sidebar-user-role" id="sidebarRole">superadmin</div>
+      </div>
+      <button class="sidebar-logout" onclick="adminLogout()" title="Se déconnecter"><i class="fa fa-sign-out-alt"></i></button>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-title" id="topbarTitle">📊 Tableau de bord</div>
+    <div class="topbar-right">
+      <span id="topbarDate" style="font-size:0.82rem;color:var(--muted);"></span>
+      <button class="topbar-btn" onclick="refreshCurrentPage()"><i class="fa fa-sync"></i> Actualiser</button>
+      <button class="topbar-btn" onclick="window.open('/','_blank')">🌐 Voir le site</button>
+    </div>
+  </header>
+
+  <div class="content" id="mainContent">
+
+    <!-- ── DASHBOARD ── -->
+    <div id="sec-dashboard" class="page-section active">
+      <div class="stat-grid" id="dashStats">
+        <div class="stat-card stat-card--orange"><div class="stat-icon stat-icon--orange">📦</div><div><div class="stat-num" id="st-orders">—</div><div class="stat-label">Commandes totales</div></div></div>
+        <div class="stat-card stat-card--green"><div class="stat-icon stat-icon--green">💰</div><div><div class="stat-num" id="st-revenue">—</div><div class="stat-label">Revenu total (DT)</div></div></div>
+        <div class="stat-card stat-card--blue"><div class="stat-icon stat-icon--blue">🛍️</div><div><div class="stat-num" id="st-products">—</div><div class="stat-label">Produits actifs</div></div></div>
+        <div class="stat-card stat-card--red"><div class="stat-icon stat-icon--red">👥</div><div><div class="stat-num" id="st-users">—</div><div class="stat-label">Clients</div></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
+        <div class="card">
+          <div class="card-header"><span class="card-title">📈 Commandes par statut</span></div>
+          <div class="card-body" style="padding:20px;" id="dashOrderStatus"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">📅 Revenus mensuels</span></div>
+          <div class="card-body" style="padding:20px;" id="dashMonthly"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">🕐 Commandes récentes</span><button class="btn btn-outline btn-sm" onclick="navTo('orders')">Voir tout</button></div>
+        <div class="card-body"><table><thead><tr><th>N° commande</th><th>Client</th><th>Montant</th><th>Statut</th><th>Date</th><th>Action</th></tr></thead><tbody id="dashRecentOrders"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ── ORDERS ── -->
+    <div id="sec-orders" class="page-section">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📦 Toutes les commandes</span>
+          <div style="display:flex;gap:8px;">
+            <select class="form-control" style="width:160px;" onchange="filterOrders(this.value)">
+              <option value="">Tous les statuts</option>
+              <option value="pending">En attente</option>
+              <option value="confirmed">Confirmée</option>
+              <option value="processing">En préparation</option>
+              <option value="shipped">Expédiée</option>
+              <option value="delivered">Livrée</option>
+              <option value="cancelled">Annulée</option>
+            </select>
+          </div>
+        </div>
+        <div class="toolbar">
+          <div class="search-box"><i class="fa fa-search"></i><input type="text" placeholder="Rechercher commande, client..." oninput="searchOrders(this.value)" /></div>
+        </div>
+        <div class="card-body"><table><thead><tr><th>N° Commande</th><th>Client</th><th>Téléphone</th><th>Montant</th><th>Paiement</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead><tbody id="ordersTable"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ── PRODUCTS ── -->
+    <div id="sec-products" class="page-section">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🛍️ Catalogue produits</span>
+          <button class="btn btn-primary" onclick="openProductModal()"><i class="fa fa-plus"></i> Nouveau produit</button>
+        </div>
+        <div class="toolbar">
+          <div class="search-box"><i class="fa fa-search"></i><input type="text" placeholder="Rechercher produit..." oninput="searchProducts(this.value)" /></div>
+          <select class="form-control" style="width:180px;" onchange="filterProductsByCategory(this.value)">
+            <option value="">Toutes catégories</option>
+            <option value="alarmes">Alarmes</option>
+            <option value="videosurveillance">Vidéosurveillance</option>
+            <option value="incendie">Détection incendie</option>
+            <option value="controle-acces">Contrôle d'accès</option>
+          </select>
+        </div>
+        <div class="card-body"><table><thead><tr><th>Image</th><th>Nom</th><th>Catégorie</th><th>Marque</th><th>Prix</th><th>Stock</th><th>En vedette</th><th>Actions</th></tr></thead><tbody id="productsTable"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ── USERS ── -->
+    <div id="sec-users" class="page-section">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">👥 Clients</span>
+          <div style="font-size:0.85rem;color:var(--muted);" id="usersCount"></div>
+        </div>
+        <div class="toolbar">
+          <div class="search-box"><i class="fa fa-search"></i><input type="text" placeholder="Rechercher client..." oninput="searchUsers(this.value)" /></div>
+        </div>
+        <div class="card-body"><table><thead><tr><th>Nom</th><th>Email</th><th>Téléphone</th><th>Commandes</th><th>Dépensé</th><th>Inscrit le</th><th>Statut</th><th>Action</th></tr></thead><tbody id="usersTable"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ── COUPONS ── -->
+    <div id="sec-coupons" class="page-section">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🏷️ Codes promo</span>
+          <button class="btn btn-primary" onclick="openCouponModal()"><i class="fa fa-plus"></i> Nouveau coupon</button>
+        </div>
+        <div class="card-body"><table><thead><tr><th>Code</th><th>Type</th><th>Valeur</th><th>Min. panier</th><th>Utilisations</th><th>Expiration</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="couponsTable"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ── ADMINS ── -->
+    <div id="sec-admins" class="page-section">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🔐 Comptes administrateurs</span>
+          <button class="btn btn-primary" onclick="openAdminModal()"><i class="fa fa-plus"></i> Nouvel admin</button>
+        </div>
+        <div class="card-body"><table><thead><tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Dernière connexion</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="adminsTable"></tbody></table></div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ══ MODALS ══ -->
+
+<!-- Order Detail Modal -->
+<div class="modal-overlay hidden" id="orderModal">
+  <div class="modal modal-lg">
+    <div class="modal-header"><div class="modal-title" id="orderModalTitle">Détail commande</div><button class="modal-close" onclick="closeModal('orderModal')">✕</button></div>
+    <div class="modal-body" id="orderModalBody"></div>
+  </div>
+</div>
+
+<!-- Product Modal -->
+<div class="modal-overlay hidden" id="productModal">
+  <div class="modal modal-lg">
+    <div class="modal-header"><div class="modal-title" id="productModalTitle">Nouveau produit</div><button class="modal-close" onclick="closeModal('productModal')">✕</button></div>
+    <div class="modal-body">
+      <form id="productForm" onsubmit="saveProduct(event)" enctype="multipart/form-data">
+        <input type="hidden" id="p-id" />
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Nom (FR) *</label><input type="text" id="p-name" class="form-control" required /></div>
+          <div class="form-group"><label class="form-label">Nom (AR)</label><input type="text" id="p-nameAr" class="form-control" dir="rtl" /></div>
+          <div class="form-group"><label class="form-label">Slug *</label><input type="text" id="p-slug" class="form-control" required /></div>
+          <div class="form-group"><label class="form-label">Catégorie *</label>
+            <select id="p-category" class="form-control" required>
+              <option value="alarmes">Alarmes intrusion</option>
+              <option value="videosurveillance">Vidéosurveillance</option>
+              <option value="incendie">Détection incendie</option>
+              <option value="controle-acces">Contrôle d'accès</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Marque</label><input type="text" id="p-brand" class="form-control" /></div>
+          <div class="form-group"><label class="form-label">SKU</label><input type="text" id="p-sku" class="form-control" /></div>
+          <div class="form-group"><label class="form-label">Prix (DT)</label><input type="number" id="p-price" class="form-control" step="0.01" min="0" /></div>
+          <div class="form-group"><label class="form-label">Prix installation (DT)</label><input type="number" id="p-installPrice" class="form-control" step="0.01" min="0" /></div>
+          <div class="form-group"><label class="form-label">Stock</label><input type="number" id="p-stock" class="form-control" min="0" /></div>
+          <div class="form-group"><label class="form-label">Statut stock</label>
+            <select id="p-stockStatus" class="form-control">
+              <option value="available">Disponible</option>
+              <option value="on_order">Sur commande</option>
+              <option value="out_of_stock">Épuisé</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Garantie</label><input type="text" id="p-warranty" class="form-control" placeholder="Ex: 2 ans" /></div>
+          <div class="form-group">
+            <label class="form-label">Options</label>
+            <div style="display:flex;gap:16px;margin-top:6px;">
+              <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" id="p-priceOnRequest" /> Prix sur demande</label>
+              <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" id="p-featured" /> En vedette</label>
+              <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" id="p-active" checked /> Actif</label>
+            </div>
+          </div>
+          <div class="form-group full"><label class="form-label">Description (FR)</label><textarea id="p-desc" class="form-control" rows="3"></textarea></div>
+          <div class="form-group full"><label class="form-label">Description (AR)</label><textarea id="p-descAr" class="form-control" rows="3" dir="rtl"></textarea></div>
+          <div class="form-group full"><label class="form-label">Caractéristiques (une par ligne)</label><textarea id="p-features" class="form-control" rows="4" placeholder="Résolution 4K&#10;Vision nocturne 30m&#10;IP66"></textarea></div>
+          <div class="form-group full"><label class="form-label">Images produit (Azure Blob)</label><input type="file" id="p-images" class="form-control" multiple accept="image/*" /></div>
+          <div id="p-currentImages" class="form-group full"></div>
+        </div>
+        <div class="modal-footer" style="padding:0;margin-top:20px;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('productModal')">Annuler</button>
+          <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Coupon Modal -->
+<div class="modal-overlay hidden" id="couponModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="couponModalTitle">Nouveau coupon</div><button class="modal-close" onclick="closeModal('couponModal')">✕</button></div>
+    <div class="modal-body">
+      <form id="couponForm" onsubmit="saveCoupon(event)">
+        <input type="hidden" id="c-id" />
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Code *</label><input type="text" id="c-code" class="form-control" required style="text-transform:uppercase;" /></div>
+          <div class="form-group"><label class="form-label">Type *</label>
+            <select id="c-type" class="form-control">
+              <option value="percentage">Pourcentage (%)</option>
+              <option value="fixed">Montant fixe (DT)</option>
+              <option value="free_shipping">Livraison gratuite</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Valeur</label><input type="number" id="c-value" class="form-control" step="0.01" min="0" /></div>
+          <div class="form-group"><label class="form-label">Panier minimum (DT)</label><input type="number" id="c-min" class="form-control" min="0" value="0" /></div>
+          <div class="form-group"><label class="form-label">Max utilisations</label><input type="number" id="c-maxUses" class="form-control" min="0" placeholder="Illimité" /></div>
+          <div class="form-group"><label class="form-label">Limite par utilisateur</label><input type="number" id="c-perUser" class="form-control" min="1" value="1" /></div>
+          <div class="form-group"><label class="form-label">Expiration</label><input type="date" id="c-expires" class="form-control" /></div>
+          <div class="form-group"><label class="form-label">Options</label>
+            <div style="display:flex;gap:16px;margin-top:6px;">
+              <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" id="c-active" checked /> Actif</label>
+              <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;"><input type="checkbox" id="c-prevOrder" /> Commande préalable</label>
+            </div>
+          </div>
+          <div class="form-group full"><label class="form-label">Description</label><input type="text" id="c-desc" class="form-control" /></div>
+        </div>
+        <div class="modal-footer" style="padding:0;margin-top:16px;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('couponModal')">Annuler</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Admin User Modal -->
+<div class="modal-overlay hidden" id="adminModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Nouvel administrateur</div><button class="modal-close" onclick="closeModal('adminModal')">✕</button></div>
+    <div class="modal-body">
+      <form id="adminForm" onsubmit="saveAdmin(event)">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="form-group"><label class="form-label">Nom complet *</label><input type="text" id="a-name" class="form-control" required /></div>
+          <div class="form-group"><label class="form-label">Email *</label><input type="email" id="a-email" class="form-control" required /></div>
+          <div class="form-group"><label class="form-label">Mot de passe *</label><input type="password" id="a-pwd" class="form-control" required minlength="8" /></div>
+          <div class="modal-footer" style="padding:0;margin-top:6px;">
+            <button type="button" class="btn btn-outline" onclick="closeModal('adminModal')">Annuler</button>
+            <button type="submit" class="btn btn-primary">Créer l'admin</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Status Update Modal -->
+<div class="modal-overlay hidden" id="statusModal">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header"><div class="modal-title">Mettre à jour le statut</div><button class="modal-close" onclick="closeModal('statusModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="statusOrderId" />
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div class="form-group"><label class="form-label">Nouveau statut *</label>
+          <select id="newStatus" class="form-control">
+            <option value="pending">En attente</option>
+            <option value="confirmed">Confirmée</option>
+            <option value="processing">En préparation</option>
+            <option value="shipped">Expédiée</option>
+            <option value="delivered">Livrée</option>
+            <option value="cancelled">Annulée</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Note (optionnel)</label><input type="text" id="statusNote" class="form-control" placeholder="Ex: Expédié par DHL" /></div>
+        <div class="modal-footer" style="padding:0;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('statusModal')">Annuler</button>
+          <button type="button" class="btn btn-primary" onclick="submitStatusUpdate()">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  ANGE GARDIEN — Admin Dashboard JS
+// ══════════════════════════════════════════════════════════
+
+const API = '/api';
+let adminToken = localStorage.getItem('ag_admin_token');
+let currentAdmin = null;
+let allOrders = [], allProducts = [], allUsers = [], allCoupons = [];
+let ordersSearch = '', productsSearch = '', usersSearch = '';
+let orderStatusFilter = '';
+let productCategoryFilter = '';
+
+// ── INIT ─────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('topbarDate').textContent = new Date().toLocaleDateString('fr-FR', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  if (adminToken) tryAutoLogin();
+});
+
+async function tryAutoLogin() {
+  try {
+    const resp = await apiGet('/auth/me');
+    if (resp.success && (resp.user.role === 'admin' || resp.user.role === 'superadmin')) {
+      currentAdmin = resp.user;
+      showAdminPanel();
+    } else {
+      adminToken = null;
+      localStorage.removeItem('ag_admin_token');
+    }
+  } catch { adminToken = null; }
+}
+
+async function adminLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('admin-email').value;
+  const pwd = document.getElementById('admin-pwd').value;
+  const errEl = document.getElementById('loginError');
+  errEl.style.display = 'none';
+  try {
+    const data = await apiPost('/auth/login', { email, password: pwd });
+    if (data.success && (data.user.role === 'admin' || data.user.role === 'superadmin')) {
+      adminToken = data.token;
+      localStorage.setItem('ag_admin_token', adminToken);
+      currentAdmin = data.user;
+      showAdminPanel();
+    } else {
+      errEl.textContent = data.message || 'Accès refusé — compte non administrateur';
+      errEl.style.display = 'block';
+    }
+  } catch {
+    errEl.textContent = 'Erreur de connexion au serveur';
+    errEl.style.display = 'block';
+  }
+}
+
+function showAdminPanel() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('sidebarName').textContent = currentAdmin.name;
+  document.getElementById('sidebarRole').textContent = currentAdmin.role;
+  loadDashboard();
+}
+
+function adminLogout() {
+  adminToken = null;
+  localStorage.removeItem('ag_admin_token');
+  location.reload();
+}
+
+// ── NAVIGATION ────────────────────────────────────────────
+const sectionTitles = {
+  dashboard: '📊 Tableau de bord', orders: '📦 Commandes',
+  products: '🛍️ Produits', users: '👥 Utilisateurs',
+  coupons: '🏷️ Codes promo', admins: '🔐 Admins'
+};
+
+function navTo(section) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('[onclick]').forEach(n => {
+    if (n.getAttribute('onclick') === `navTo('${section}')`) n.classList.add('active');
+  });
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.getElementById(`sec-${section}`).classList.add('active');
+  document.getElementById('topbarTitle').textContent = sectionTitles[section] || section;
+  const loaders = { dashboard: loadDashboard, orders: loadOrders, products: loadProducts, users: loadUsers, coupons: loadCoupons, admins: loadAdmins };
+  if (loaders[section]) loaders[section]();
+}
+
+function refreshCurrentPage() {
+  const active = document.querySelector('.page-section.active');
+  if (active) {
+    const id = active.id.replace('sec-', '');
+    const loaders = { dashboard: loadDashboard, orders: loadOrders, products: loadProducts, users: loadUsers, coupons: loadCoupons, admins: loadAdmins };
+    if (loaders[id]) loaders[id]();
+    toast('Actualisé', 'success');
+  }
+}
+
+// ── API HELPERS ───────────────────────────────────────────
+async function apiGet(path) {
+  const r = await fetch(API + path, { headers: { 'Authorization': `Bearer ${adminToken}` } });
+  return r.json();
+}
+async function apiPost(path, body) {
+  const r = await fetch(API + path, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` }, body: JSON.stringify(body) });
+  return r.json();
+}
+async function apiPut(path, body) {
+  const r = await fetch(API + path, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` }, body: JSON.stringify(body) });
+  return r.json();
+}
+async function apiDelete(path) {
+  const r = await fetch(API + path, { method: 'DELETE', headers: { 'Authorization': `Bearer ${adminToken}` } });
+  return r.json();
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const d = await apiGet('/admin/dashboard');
+    if (!d.success) return;
+    const s = d.stats;
+    document.getElementById('st-orders').textContent = s.totalOrders.toLocaleString();
+    document.getElementById('st-revenue').textContent = (s.totalRevenue).toFixed(0) + ' DT';
+    document.getElementById('st-products').textContent = s.totalProducts;
+    document.getElementById('st-users').textContent = s.totalUsers;
+
+    // Order status chart
+    const statusMap = { pending:'En attente', confirmed:'Confirmée', processing:'Préparation', shipped:'Expédiée', delivered:'Livrée', cancelled:'Annulée' };
+    const maxCount = Math.max(...s.ordersByStatus.map(o => o.count), 1);
+    document.getElementById('dashOrderStatus').innerHTML = '<div class="chart-bar-wrap">' +
+      s.ordersByStatus.map(o => `
+        <div class="chart-bar-row">
+          <div class="chart-bar-label">${statusMap[o._id] || o._id}</div>
+          <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${Math.round((o.count/maxCount)*100)}%"></div></div>
+          <div class="chart-bar-val">${o.count}</div>
+        </div>`).join('') + '</div>';
+
+    // Monthly revenue
+    const months = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+    const maxRev = Math.max(...s.monthlyRevenue.map(m => m.revenue), 1);
+    document.getElementById('dashMonthly').innerHTML = '<div class="chart-bar-wrap">' +
+      [...s.monthlyRevenue].reverse().slice(0, 6).map(m => `
+        <div class="chart-bar-row">
+          <div class="chart-bar-label">${months[m._id.month - 1]} ${m._id.year}</div>
+          <div class="chart-bar-bg"><div class="chart-bar-fill" style="width:${Math.round((m.revenue/maxRev)*100)}%"></div></div>
+          <div class="chart-bar-val">${m.revenue.toFixed(0)} DT</div>
+        </div>`).join('') + '</div>';
+
+    // Recent orders
+    document.getElementById('dashRecentOrders').innerHTML = s.recentOrders.map(renderOrderRow).join('');
+  } catch(e) { console.error(e); }
+}
+
+// ── ORDERS ────────────────────────────────────────────────
+async function loadOrders() {
+  const url = orderStatusFilter ? `/admin/orders?status=${orderStatusFilter}` : '/admin/orders';
+  const d = await apiGet(url);
+  if (d.success) { allOrders = d.orders; renderOrdersTable(); }
+}
+
+function filterOrders(status) { orderStatusFilter = status; loadOrders(); }
+
+function searchOrders(q) {
+  ordersSearch = q.toLowerCase();
+  renderOrdersTable();
+}
+
+function renderOrdersTable() {
+  let orders = allOrders;
+  if (ordersSearch) orders = orders.filter(o =>
+    o.orderNumber?.toLowerCase().includes(ordersSearch) ||
+    o.customer?.name?.toLowerCase().includes(ordersSearch) ||
+    o.customer?.phone?.includes(ordersSearch)
+  );
+  document.getElementById('ordersTable').innerHTML = orders.length ? orders.map(renderOrderRow).join('') :
+    `<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">📦</div>Aucune commande</div></td></tr>`;
+}
+
+function renderOrderRow(o) {
+  const statusColors = { pending:'badge-blue', confirmed:'badge-blue', processing:'badge-orange', shipped:'badge-orange', delivered:'badge-green', cancelled:'badge-red' };
+  const statusLabels = { pending:'En attente', confirmed:'Confirmée', processing:'Préparation', shipped:'Expédiée', delivered:'Livrée', cancelled:'Annulée' };
+  const payLabel = o.paymentMethod === 'cash_on_delivery' ? '💵 Espèces' : '💳 En ligne';
+  return `<tr>
+    <td><strong>${o.orderNumber || '—'}</strong></td>
+    <td>${o.customer?.name || '—'}</td>
+    <td>${o.customer?.phone || '—'}</td>
+    <td><strong style="color:var(--orange)">${(o.total||0).toFixed(2)} DT</strong></td>
+    <td>${payLabel}</td>
+    <td><span class="badge ${statusColors[o.status] || 'badge-grey'}">${statusLabels[o.status] || o.status}</span></td>
+    <td>${new Date(o.createdAt).toLocaleDateString('fr-FR')}</td>
+    <td style="display:flex;gap:6px;">
+      <button class="btn btn-outline btn-xs" onclick="openOrderDetail('${o._id}')"><i class="fa fa-eye"></i></button>
+      <button class="btn btn-primary btn-xs" onclick="openStatusModal('${o._id}','${o.status}')"><i class="fa fa-edit"></i> Statut</button>
+    </td>
+  </tr>`;
+}
+
+async function openOrderDetail(id) {
+  const d = await apiGet(`/admin/orders/${id}`);
+  if (!d.success) return;
+  const o = d.order;
+  const statusLabels = { pending:'En attente', confirmed:'Confirmée', processing:'Préparation', shipped:'Expédiée', delivered:'Livrée', cancelled:'Annulée' };
+  document.getElementById('orderModalTitle').textContent = `Commande ${o.orderNumber}`;
+  document.getElementById('orderModalBody').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+      <div style="background:var(--bg);border-radius:10px;padding:16px;">
+        <div style="font-weight:700;color:var(--blue);margin-bottom:8px;">👤 Client</div>
+        <div>${o.customer.name}</div><div style="color:var(--muted)">${o.customer.email}</div><div>${o.customer.phone}</div>
+      </div>
+      <div style="background:var(--bg);border-radius:10px;padding:16px;">
+        <div style="font-weight:700;color:var(--blue);margin-bottom:8px;">📍 Livraison</div>
+        <div>${o.shippingAddress.street}</div><div>${o.shippingAddress.city}, ${o.shippingAddress.region}</div>
+        <div style="margin-top:6px;color:var(--orange);">⏱️ ${o.estimatedDelivery || '—'}</div>
+      </div>
+    </div>
+    <div style="font-weight:700;color:var(--blue);margin-bottom:12px;">🛒 Produits commandés</div>
+    <table style="width:100%;font-size:0.85rem;margin-bottom:20px;">
+      <thead><tr><th>Produit</th><th>Qté</th><th>Prix unit.</th><th>Total</th></tr></thead>
+      <tbody>
+        ${(o.items||[]).map(i => `<tr>
+          <td>${i.productName} ${i.withInstallation ? '<span class="badge badge-blue">+Installation</span>' : ''}</td>
+          <td>${i.quantity}</td>
+          <td>${(i.price+i.installationPrice).toFixed(2)} DT</td>
+          <td>${((i.price+i.installationPrice)*i.quantity).toFixed(2)} DT</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div>
+        <div style="font-weight:700;color:var(--blue);margin-bottom:8px;">💳 Paiement</div>
+        <div>${o.paymentMethod === 'cash_on_delivery' ? '💵 Paiement à la livraison' : '💳 Paiement en ligne'}</div>
+        ${o.couponCode ? `<div style="color:var(--success)">🏷️ Coupon: ${o.couponCode}</div>` : ''}
+        ${o.notes ? `<div style="color:var(--muted)">📝 ${o.notes}</div>` : ''}
+      </div>
+      <div style="background:var(--bg);border-radius:10px;padding:16px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>Sous-total</span><span>${o.subtotal?.toFixed(2)} DT</span></div>
+        ${o.discount > 0 ? `<div style="display:flex;justify-content:space-between;margin-bottom:6px;color:var(--success)"><span>Réduction</span><span>-${o.discount?.toFixed(2)} DT</span></div>` : ''}
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span>Livraison</span><span>${o.shippingFee?.toFixed(2)} DT</span></div>
+        <div style="display:flex;justify-content:space-between;font-weight:800;color:var(--orange);font-size:1.1rem;border-top:1px solid var(--border);padding-top:8px;"><span>Total</span><span>${o.total?.toFixed(2)} DT</span></div>
+      </div>
+    </div>
+    <div style="margin-top:20px;">
+      <div style="font-weight:700;color:var(--blue);margin-bottom:8px;">📈 Historique statut</div>
+      ${(o.statusHistory||[]).map(h => `<div style="font-size:0.85rem;padding:6px 0;border-bottom:1px solid var(--border);color:var(--muted)">${new Date(h.date).toLocaleString('fr-FR')} — <strong style="color:var(--blue)">${h.status}</strong> ${h.note ? '— '+h.note : ''}</div>`).join('')}
+    </div>`;
+  document.getElementById('orderModal').classList.remove('hidden');
+}
+
+function openStatusModal(id, currentStatus) {
+  document.getElementById('statusOrderId').value = id;
+  document.getElementById('newStatus').value = currentStatus;
+  document.getElementById('statusNote').value = '';
+  document.getElementById('statusModal').classList.remove('hidden');
+}
+
+async function submitStatusUpdate() {
+  const id = document.getElementById('statusOrderId').value;
+  const status = document.getElementById('newStatus').value;
+  const note = document.getElementById('statusNote').value;
+  const d = await apiPut(`/admin/orders/${id}/status`, { status, note });
+  if (d.success) { toast('Statut mis à jour', 'success'); closeModal('statusModal'); loadOrders(); loadDashboard(); }
+  else toast('Erreur: ' + d.message, 'danger');
+}
+
+// ── PRODUCTS ──────────────────────────────────────────────
+async function loadProducts() {
+  const d = await apiGet('/admin/products');
+  if (d.success) { allProducts = d.products; renderProductsTable(); }
+}
+
+function searchProducts(q) { productsSearch = q.toLowerCase(); renderProductsTable(); }
+function filterProductsByCategory(cat) { productCategoryFilter = cat; renderProductsTable(); }
+
+function renderProductsTable() {
+  let products = allProducts;
+  if (productsSearch) products = products.filter(p => p.name.toLowerCase().includes(productsSearch) || p.brand?.toLowerCase().includes(productsSearch));
+  if (productCategoryFilter) products = products.filter(p => p.category === productCategoryFilter);
+  const catLabels = { alarmes:'🚨 Alarmes', videosurveillance:'📹 Vidéo', incendie:'🔥 Incendie', 'controle-acces':'🔐 Accès' };
+  document.getElementById('productsTable').innerHTML = products.length ? products.map(p => `
+    <tr>
+      <td><img class="product-thumb" src="${p.thumbnail||''}" onerror="this.src='https://via.placeholder.com/42x42/1a3272/fff?text=${p.brand||'AG'}'" /></td>
+      <td><strong>${p.name}</strong></td>
+      <td>${catLabels[p.category] || p.category}</td>
+      <td><span class="tag">${p.brand || '—'}</span></td>
+      <td><strong style="color:var(--orange)">${p.priceOnRequest ? 'Sur devis' : p.price.toFixed(2)+' DT'}</strong></td>
+      <td>${p.stockStatus === 'available' ? '<span class="badge badge-green">En stock</span>' : p.stockStatus === 'on_order' ? '<span class="badge badge-orange">Commande</span>' : '<span class="badge badge-red">Épuisé</span>'}</td>
+      <td>${p.featured ? '⭐' : '—'}</td>
+      <td style="display:flex;gap:6px;">
+        <button class="btn btn-outline btn-xs" onclick="openProductModal('${p._id}')"><i class="fa fa-edit"></i></button>
+        <button class="btn btn-danger btn-xs" onclick="deleteProduct('${p._id}','${p.name.replace(/'/g,'\\\')}')"><i class="fa fa-trash"></i></button>
+      </td>
+    </tr>`).join('') :
+    `<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">🛍️</div>Aucun produit</div></td></tr>`;
+}
+
+function openProductModal(id) {
+  document.getElementById('productModalTitle').textContent = id ? 'Modifier le produit' : 'Nouveau produit';
+  document.getElementById('productForm').reset();
+  document.getElementById('p-id').value = '';
+  document.getElementById('p-active').checked = true;
+  document.getElementById('p-currentImages').innerHTML = '';
+  if (id) {
+    const p = allProducts.find(x => x._id === id);
+    if (p) {
+      document.getElementById('p-id').value = p._id;
+      document.getElementById('p-name').value = p.name || '';
+      document.getElementById('p-nameAr').value = p.nameAr || '';
+      document.getElementById('p-slug').value = p.slug || '';
+      document.getElementById('p-category').value = p.category || 'alarmes';
+      document.getElementById('p-brand').value = p.brand || '';
+      document.getElementById('p-sku').value = p.sku || '';
+      document.getElementById('p-price').value = p.price || 0;
+      document.getElementById('p-installPrice').value = p.installationPrice || 0;
+      document.getElementById('p-stock').value = p.stock || 0;
+      document.getElementById('p-stockStatus').value = p.stockStatus || 'available';
+      document.getElementById('p-warranty').value = p.warranty || '';
+      document.getElementById('p-priceOnRequest').checked = p.priceOnRequest || false;
+      document.getElementById('p-featured').checked = p.featured || false;
+      document.getElementById('p-active').checked = p.isActive !== false;
+      document.getElementById('p-desc').value = p.description || '';
+      document.getElementById('p-descAr').value = p.descriptionAr || '';
+      document.getElementById('p-features').value = (p.features || []).join('\n');
+      if (p.images?.length) {
+        document.getElementById('p-currentImages').innerHTML = `
+          <label class="form-label">Images actuelles</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+            ${p.images.map(img => `<img src="${img}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--border);" />`).join('')}
+          </div>`;
+      }
+    }
+  }
+  document.getElementById('productModal').classList.remove('hidden');
+}
+
+async function saveProduct(e) {
+  e.preventDefault();
+  const id = document.getElementById('p-id').value;
+  const formData = new FormData();
+  const fields = { name:'p-name', nameAr:'p-nameAr', slug:'p-slug', category:'p-category', brand:'p-brand', sku:'p-sku', price:'p-price', installationPrice:'p-installPrice', stock:'p-stock', stockStatus:'p-stockStatus', warranty:'p-warranty', description:'p-desc', descriptionAr:'p-descAr' };
+  for (const [key, elId] of Object.entries(fields)) {
+    formData.append(key, document.getElementById(elId).value);
+  }
+  formData.append('priceOnRequest', document.getElementById('p-priceOnRequest').checked);
+  formData.append('featured', document.getElementById('p-featured').checked);
+  formData.append('isActive', document.getElementById('p-active').checked);
+  const feats = document.getElementById('p-features').value.split('\n').filter(f => f.trim());
+  formData.append('features', JSON.stringify(feats));
+  const files = document.getElementById('p-images').files;
+  for (const f of files) formData.append('images', f);
+
+  const url = id ? `/api/admin/products/${id}` : '/api/admin/products';
+  const method = id ? 'PUT' : 'POST';
+  try {
+    const resp = await fetch(url, { method, headers: { 'Authorization': `Bearer ${adminToken}` }, body: formData });
+    const d = await resp.json();
+    if (d.success) { toast(id ? 'Produit mis à jour' : 'Produit créé', 'success'); closeModal('productModal'); loadProducts(); }
+    else toast('Erreur: ' + d.message, 'danger');
+  } catch { toast('Erreur réseau', 'danger'); }
+}
+
+async function deleteProduct(id, name) {
+  if (!confirm(`Supprimer "${name}" ?`)) return;
+  const d = await apiDelete(`/admin/products/${id}`);
+  if (d.success) { toast('Produit supprimé', 'success'); loadProducts(); }
+  else toast('Erreur: ' + d.message, 'danger');
+}
+
+// ── USERS ─────────────────────────────────────────────────
+async function loadUsers() {
+  const d = await apiGet('/admin/users');
+  if (d.success) { allUsers = d.users.filter(u => u.role === 'customer'); renderUsersTable(); }
+}
+
+function searchUsers(q) { usersSearch = q.toLowerCase(); renderUsersTable(); }
+
+function renderUsersTable() {
+  let users = allUsers;
+  if (usersSearch) users = users.filter(u => u.name?.toLowerCase().includes(usersSearch) || u.email?.toLowerCase().includes(usersSearch));
+  document.getElementById('usersCount').textContent = `${users.length} client(s)`;
+  document.getElementById('usersTable').innerHTML = users.length ? users.map(u => `
+    <tr>
+      <td><strong>${u.name}</strong></td>
+      <td>${u.email}</td>
+      <td>${u.phone || '—'}</td>
+      <td>${u.totalOrders || 0}</td>
+      <td>${(u.totalSpent || 0).toFixed(2)} DT</td>
+      <td>${new Date(u.createdAt).toLocaleDateString('fr-FR')}</td>
+      <td><span class="badge ${u.isActive ? 'badge-green' : 'badge-red'}">${u.isActive ? 'Actif' : 'Désactivé'}</span></td>
+      <td><button class="btn btn-outline btn-xs" onclick="toggleUser('${u._id}')">${u.isActive ? 'Désactiver' : 'Activer'}</button></td>
+    </tr>`).join('') :
+    `<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">👥</div>Aucun client</div></td></tr>`;
+}
+
+async function toggleUser(id) {
+  const d = await apiPut(`/admin/users/${id}/toggle`, {});
+  if (d.success) { toast('Statut utilisateur modifié', 'success'); loadUsers(); }
+  else toast('Erreur: ' + d.message, 'danger');
+}
+
+// ── COUPONS ───────────────────────────────────────────────
+async function loadCoupons() {
+  const d = await apiGet('/admin/coupons');
+  if (d.success) { allCoupons = d.coupons; renderCouponsTable(); }
+}
+
+function renderCouponsTable() {
+  const typeLabels = { percentage:'%', fixed:'DT fixe', free_shipping:'Livraison' };
+  document.getElementById('couponsTable').innerHTML = allCoupons.length ? allCoupons.map(c => `
+    <tr>
+      <td><strong style="letter-spacing:1px">${c.code}</strong></td>
+      <td>${typeLabels[c.type] || c.type}</td>
+      <td>${c.type === 'free_shipping' ? 'Gratuit' : c.type === 'percentage' ? c.value+'%' : c.value+' DT'}</td>
+      <td>${c.minCartAmount || 0} DT</td>
+      <td>${c.usedCount || 0} ${c.maxUses ? '/ '+c.maxUses : ''}</td>
+      <td>${c.expiresAt ? new Date(c.expiresAt).toLocaleDateString('fr-FR') : '—'}</td>
+      <td><span class="badge ${c.isActive ? 'badge-green' : 'badge-grey'}">${c.isActive ? 'Actif' : 'Inactif'}</span></td>
+      <td style="display:flex;gap:6px;">
+        <button class="btn btn-outline btn-xs" onclick="openCouponModal('${c._id}')"><i class="fa fa-edit"></i></button>
+        <button class="btn btn-danger btn-xs" onclick="deleteCoupon('${c._id}')"><i class="fa fa-trash"></i></button>
+      </td>
+    </tr>`).join('') :
+    `<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">🏷️</div>Aucun coupon</div></td></tr>`;
+}
+
+function openCouponModal(id) {
+  document.getElementById('couponModalTitle').textContent = id ? 'Modifier coupon' : 'Nouveau coupon';
+  document.getElementById('couponForm').reset();
+  document.getElementById('c-id').value = '';
+  document.getElementById('c-active').checked = true;
+  if (id) {
+    const c = allCoupons.find(x => x._id === id);
+    if (c) {
+      document.getElementById('c-id').value = c._id;
+      document.getElementById('c-code').value = c.code;
+      document.getElementById('c-type').value = c.type;
+      document.getElementById('c-value').value = c.value;
+      document.getElementById('c-min').value = c.minCartAmount || 0;
+      document.getElementById('c-maxUses').value = c.maxUses || '';
+      document.getElementById('c-perUser').value = c.perUserLimit || 1;
+      document.getElementById('c-expires').value = c.expiresAt ? c.expiresAt.slice(0,10) : '';
+      document.getElementById('c-active').checked = c.isActive;
+      document.getElementById('c-prevOrder').checked = c.requiresPreviousOrder || false;
+      document.getElementById('c-desc').value = c.description || '';
+    }
+  }
+  document.getElementById('couponModal').classList.remove('hidden');
+}
+
+async function saveCoupon(e) {
+  e.preventDefault();
+  const id = document.getElementById('c-id').value;
+  const body = {
+    code: document.getElementById('c-code').value.toUpperCase(),
+    type: document.getElementById('c-type').value,
+    value: parseFloat(document.getElementById('c-value').value) || 0,
+    minCartAmount: parseFloat(document.getElementById('c-min').value) || 0,
+    maxUses: document.getElementById('c-maxUses').value ? parseInt(document.getElementById('c-maxUses').value) : null,
+    perUserLimit: parseInt(document.getElementById('c-perUser').value) || 1,
+    expiresAt: document.getElementById('c-expires').value || null,
+    isActive: document.getElementById('c-active').checked,
+    requiresPreviousOrder: document.getElementById('c-prevOrder').checked,
+    description: document.getElementById('c-desc').value
+  };
+  const d = id ? await apiPut(`/admin/coupons/${id}`, body) : await apiPost('/admin/coupons', body);
+  if (d.success) { toast(id ? 'Coupon mis à jour' : 'Coupon créé', 'success'); closeModal('couponModal'); loadCoupons(); }
+  else toast('Erreur: ' + d.message, 'danger');
+}
+
+async function deleteCoupon(id) {
+  if (!confirm('Supprimer ce coupon ?')) return;
+  const d = await apiDelete(`/admin/coupons/${id}`);
+  if (d.success) { toast('Coupon supprimé', 'success'); loadCoupons(); }
+  else toast('Erreur: ' + d.message, 'danger');
+}
+
+// ── ADMINS ────────────────────────────────────────────────
+async function loadAdmins() {
+  const d = await apiGet('/admin/users');
+  if (d.success) {
+    const admins = d.users.filter(u => u.role === 'admin' || u.role === 'superadmin');
+    document.getElementById('adminsTable').innerHTML = admins.map(u => `
+      <tr>
+        <td><strong>${u.name}</strong></td>
+        <td>${u.email}</td>
+        <td><span class="badge ${u.role === 'superadmin' ? 'badge-purple' : 'badge-blue'}">${u.role}</span></td>
+        <td>${u.lastLogin ? new Date(u.lastLogin).toLocaleString('fr-FR') : '—'}</td>
+        <td><span class="badge ${u.isActive ? 'badge-green' : 'badge-red'}">${u.isActive ? 'Actif' : 'Désactivé'}</span></td>
+        <td>${u.role !== 'superadmin' ? `<button class="btn btn-outline btn-xs" onclick="toggleUser('${u._id}')">Toggle</button>` : '—'}</td>
+      </tr>`).join('') || `<tr><td colspan="6"><div class="empty-state">Aucun admin</div></td></tr>`;
+  }
+}
+
+function openAdminModal() {
+  document.getElementById('adminForm').reset();
+  document.getElementById('adminModal').classList.remove('hidden');
+}
+
+async function saveAdmin(e) {
+  e.preventDefault();
+  const body = { name: document.getElementById('a-name').value, email: document.getElementById('a-email').value, password: document.getElementById('a-pwd').value };
+  const d = await apiPost('/admin/users/admin', body);
+  if (d.success) { toast('Admin créé avec succès', 'success'); closeModal('adminModal'); loadAdmins(); }
+  else toast('Erreur: ' + d.message, 'danger');
+}
+
+// ── MODAL UTILS ───────────────────────────────────────────
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.add('hidden'); }));
+
+// ── TOAST ─────────────────────────────────────────────────
+function toast(msg, type = 'info') {
+  const el = document.createElement('div');
+  el.className = `toast ${type === 'success' ? 'toast-success' : type === 'danger' ? 'toast-danger' : ''}`;
+  el.textContent = msg;
+  document.getElementById('toastContainer').appendChild(el);
+  setTimeout(() => el.remove(), 3800);
+}
+</script>
+</body>
+</html>

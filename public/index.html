@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shield Technology — Sécurité Électronique, Sousse</title>
+  <meta name="description" content="Shield Technology, votre expert en sécurité électronique à Sousse. Alarmes, vidéosurveillance, détection incendie, contrôle d'accès. Contactez-nous au +216 94 020 700." />
+  <meta name="keywords" content="sécurité électronique, alarme, vidéosurveillance, tunisie, sousse, shield technology, DSC, Grundig, Panasonic, FireClass" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" type="image/png" href="/logo.png" />
+</head>
+<body>
+
+<!-- ══════════════════ HEADER ══════════════════ -->
+<header class="header" id="header">
+  <div class="container">
+    <nav class="nav">
+      <a href="#" class="nav__logo" onclick="showPage('home')">
+        <div class="nav__logo-icon">
+          <img src="/logo.png" alt="Shield Technology" style="width:42px;height:42px;object-fit:contain;border-radius:4px;" />
+        </div>
+        <div class="nav__logo-text">
+          <span>Shield Technology</span>
+          <span>SÉCURITÉ ÉLECTRONIQUE</span>
+        </div>
+      </a>
+
+      <div class="nav__links">
+        <a class="nav__link active" onclick="showPage('home')" data-fr="Accueil" data-ar="الرئيسية">Accueil</a>
+        <a class="nav__link" onclick="showPage('solutions')" data-fr="Solutions" data-ar="الحلول">Solutions</a>
+        <a class="nav__link nav__link--shop" onclick="showPage('shop')" data-fr="🛒 Boutique" data-ar="🛒 المتجر">🛒 Boutique</a>
+        <a class="nav__link" onclick="showPage('about')" data-fr="À Propos" data-ar="عن الشركة">À Propos</a>
+        <a class="nav__link" onclick="showPage('contact')" data-fr="Contact" data-ar="اتصل بنا">Contact</a>
+        <a class="nav__link" onclick="showPage('tracking')" data-fr="Suivi" data-ar="تتبع الطلب">Suivi</a>
+      </div>
+
+      <div class="nav__actions">
+        <button class="nav__lang-btn" onclick="toggleLang()" id="langBtn">🌐 عربي</button>
+        <button class="nav__user-btn" onclick="openAuthModal()" id="userBtn" title="Mon compte">
+          <i class="fa fa-user"></i>
+        </button>
+        <button class="nav__cart-btn" onclick="showPage('cart')">
+          <i class="fa fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+      <a onclick="showPage('home'); closeMobileMenu()">🏠 Accueil</a>
+      <a onclick="showPage('solutions'); closeMobileMenu()">⚡ Solutions</a>
+      <a onclick="showPage('shop'); closeMobileMenu()">🛒 Boutique</a>
+      <a onclick="showPage('about'); closeMobileMenu()">📋 À Propos</a>
+      <a onclick="showPage('contact'); closeMobileMenu()">📞 Contact</a>
+      <a onclick="showPage('tracking'); closeMobileMenu()">📦 Suivi commande</a>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════ PAGES ══════════════════ -->
+<main class="page">
+
+  <!-- ── PAGE: HOME ── -->
+  <section id="page-home">
+    <!-- Hero -->
+    <div class="hero">
+      <div class="container">
+        <div class="hero__grid">
+          <div class="hero__content">
+            <div class="hero__badge" data-fr="🛡️ Votre expert sécurité à Sousse" data-ar="🛡️ خبير الأمن في سوسة">
+              🛡️ Votre expert sécurité à Sousse
+            </div>
+            <h1 class="hero__title">
+              <span data-fr="Votre espace" data-ar="مساحتك">Votre espace</span>
+              <span data-fr=" sous protection," data-ar=" تحت الحماية،"> sous protection,</span><br>
+              <span class="text-orange" data-fr="votre esprit en paix." data-ar="وعقلك في سلام.">votre esprit en paix.</span>
+            </h1>
+            <p class="hero__subtitle" data-fr="Shield Technology vous protège avec des solutions de sécurité électronique de haute technologie à Sousse. Alarmes, vidéosurveillance, détection incendie et contrôle d'accès." data-ar="Shield Technology تحميك بحلول أمنية إلكترونية متطورة في سوسة. إنذار، مراقبة بالفيديو، كشف الحريق والتحكم في الدخول.">
+              Shield Technology vous protège avec des solutions de sécurité électronique de haute technologie à Sousse.
+            </p>
+            <div class="hero__actions">
+              <button class="btn btn--primary" onclick="showPage('shop')" data-fr="🛒 Voir la boutique" data-ar="🛒 تصفح المتجر">🛒 Voir la boutique</button>
+              <button class="btn btn--outline-white" onclick="showPage('contact')" data-fr="📞 Nous contacter" data-ar="📞 اتصل بنا">📞 Nous contacter</button>
+            </div>
+            <div class="hero__stats">
+              <div class="hero__stat"><div class="hero__stat-num">30+</div><div class="hero__stat-label" data-fr="Ans d'expérience" data-ar="سنة خبرة">Ans d'expérience</div></div>
+              <div class="hero__stat"><div class="hero__stat-num">20K+</div><div class="hero__stat-label" data-fr="Sites équipés" data-ar="موقع مجهز">Sites équipés</div></div>
+              <div class="hero__stat"><div class="hero__stat-num">89%</div><div class="hero__stat-label" data-fr="Clients fidèles" data-ar="عملاء أوفياء">Clients fidèles</div></div>
+              <div class="hero__stat"><div class="hero__stat-num">8K+</div><div class="hero__stat-label" data-fr="Comptes télésurveillance" data-ar="حسابات مراقبة">Comptes télésurveillance</div></div>
+            </div>
+          </div>
+          <div class="hero__visual">
+            <div class="hero__shield" style="display:flex;align-items:center;justify-content:center;">
+              <img src="/logo.png" alt="Shield Technology" style="width:260px;height:260px;object-fit:contain;filter:drop-shadow(0 8px 32px rgba(212,32,38,0.45));" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="container">
+        <div class="stats-bar__grid">
+          <div class="stat-item"><div class="stat-item__num">30+</div><div class="stat-item__label" data-fr="Ans" data-ar="سنة">Ans</div></div>
+          <div class="stat-item"><div class="stat-item__num">20 000+</div><div class="stat-item__label" data-fr="Sites équipés" data-ar="مواقع">Sites équipés</div></div>
+          <div class="stat-item"><div class="stat-item__num">89%</div><div class="stat-item__label" data-fr="Fidélité" data-ar="ولاء">Fidélité</div></div>
+          <div class="stat-item"><div class="stat-item__num">50+</div><div class="stat-item__label" data-fr="Experts" data-ar="خبير">Experts</div></div>
+          <div class="stat-item"><div class="stat-item__num">8 000+</div><div class="stat-item__label" data-fr="Télésurveillance" data-ar="مراقبة">Télésurveillance</div></div>
+          <div class="stat-item"><div class="stat-item__num">24/7</div><div class="stat-item__label" data-fr="SAV réactif" data-ar="دعم متواصل">SAV réactif</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Categories -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title text-center" data-fr="Nos catégories de produits" data-ar="فئات منتجاتنا">Nos catégories de produits</h2>
+        <p class="section-subtitle text-center" data-fr="Des équipements certifiés des meilleures marques mondiales" data-ar="معدات معتمدة من أفضل الماركات العالمية">Des équipements certifiés des meilleures marques mondiales</p>
+        <div class="categories-grid">
+          <div class="category-card" onclick="filterShop('alarmes')">
+            <div class="category-card__icon category-card__icon--alarme">🚨</div>
+            <div class="category-card__body">
+              <div class="category-card__title" data-fr="Alarmes Intrusion" data-ar="إنذار الاقتحام">Alarmes Intrusion</div>
+              <div class="category-card__count" data-fr="DSC · Johnson Controls" data-ar="DSC · جونسون كونترولز">DSC · Johnson Controls</div>
+            </div>
+          </div>
+          <div class="category-card" onclick="filterShop('videosurveillance')">
+            <div class="category-card__icon category-card__icon--video">📹</div>
+            <div class="category-card__body">
+              <div class="category-card__title" data-fr="Vidéosurveillance" data-ar="المراقبة بالكاميرا">Vidéosurveillance</div>
+              <div class="category-card__count" data-fr="Grundig · Panasonic · Tyco" data-ar="Grundig · Panasonic · Tyco">Grundig · Panasonic · Tyco</div>
+            </div>
+          </div>
+          <div class="category-card" onclick="filterShop('incendie')">
+            <div class="category-card__icon category-card__icon--fire">🔥</div>
+            <div class="category-card__body">
+              <div class="category-card__title" data-fr="Détection Incendie" data-ar="كشف الحريق">Détection Incendie</div>
+              <div class="category-card__count" data-fr="FireClass" data-ar="FireClass">FireClass</div>
+            </div>
+          </div>
+          <div class="category-card" onclick="filterShop('controle-acces')">
+            <div class="category-card__icon category-card__icon--access">🔐</div>
+            <div class="category-card__body">
+              <div class="category-card__title" data-fr="Contrôle d'accès" data-ar="التحكم في الدخول">Contrôle d'accès</div>
+              <div class="category-card__count" data-fr="Kantech · Midland" data-ar="Kantech · Midland">Kantech · Midland</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="section section--grey">
+      <div class="container">
+        <h2 class="section-title text-center" data-fr="Produits en vedette" data-ar="المنتجات المميزة">Produits en vedette</h2>
+        <p class="section-subtitle text-center" data-fr="Notre sélection des meilleures solutions" data-ar="اختيارنا لأفضل الحلول">Notre sélection des meilleures solutions</p>
+        <div class="products-grid" id="featuredProducts">
+          <div class="loader"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title text-center" data-fr="Ce que disent nos clients" data-ar="ما يقوله عملاؤنا">Ce que disent nos clients</h2>
+        <p class="section-subtitle text-center" data-fr="89% de nos clients nous font confiance depuis des années" data-ar="89% من عملائنا يثقون بنا منذ سنوات">89% de nos clients nous font confiance depuis des années</p>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text" data-fr='"Shield Technology a équipé notre hôtel. SAV très réactif, techniciens professionnels. Je recommande vivement."' data-ar='"Shield Technology جهزت فندقنا. خدمة ما بعد البيع سريعة جداً، فنيون محترفون. أنصح بها بشدة."'>"Shield Technology a équipé notre hôtel. SAV très réactif, techniciens professionnels. Je recommande vivement."</p>
+            <div class="testimonial-author">Karim B.</div>
+            <div class="testimonial-role" data-fr="Directeur Hôtel, Sousse" data-ar="مدير فندق، سوسة">Directeur Hôtel, Sousse</div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text" data-fr='"Système d\'alarme DSC impeccable. Après 5 ans, zéro problème. Intervention en moins de 2h en cas de besoin."' data-ar='"نظام إنذار DSC لا تشوبه شائبة. بعد 5 سنوات، صفر مشاكل. تدخل في أقل من ساعتين عند الحاجة."'>"Système d'alarme DSC impeccable. Après 5 ans, zéro problème. Intervention en moins de 2h en cas de besoin."</p>
+            <div class="testimonial-author">Sonia M.</div>
+            <div class="testimonial-role" data-fr="Directrice Clinique, Tunis" data-ar="مديرة عيادة، تونس">Directrice Clinique, Tunis</div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★☆</div>
+            <p class="testimonial-text" data-fr='"Caméras Panasonic 4K d\'une qualité exceptionnelle. L\'IA fait la différence, beaucoup moins de fausses alertes."' data-ar='"كاميرات Panasonic 4K بجودة استثنائية. الذكاء الاصطناعي يحدث فرقاً، تنبيهات خاطئة أقل بكثير."'>"Caméras Panasonic 4K d'une qualité exceptionnelle. L'IA fait la différence, beaucoup moins de fausses alertes."</p>
+            <div class="testimonial-author">Mohamed T.</div>
+            <div class="testimonial-role" data-fr="Responsable sécurité, Centre commercial" data-ar="مسؤول أمن، مركز تجاري">Responsable sécurité, Centre commercial</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section section--grey">
+      <div class="container text-center">
+        <h2 class="section-title" data-fr="Besoin d'un devis personnalisé ?" data-ar="تحتاج عرض سعر مخصص؟">Besoin d'un devis personnalisé ?</h2>
+        <p class="section-subtitle" data-fr="Nos experts analysent vos besoins et vous proposent une solution sur mesure." data-ar="خبراؤنا يحللون احتياجاتك ويقترحون حلاً مخصصاً.">Nos experts analysent vos besoins et vous proposent une solution sur mesure.</p>
+        <button class="btn btn--primary" onclick="showPage('contact')" data-fr="Demander un devis gratuit" data-ar="طلب عرض سعر مجاني">Demander un devis gratuit</button>
+      </div>
+    </section>
+  </section>
+
+  <!-- ── PAGE: SOLUTIONS ── -->
+  <section id="page-solutions" class="hidden">
+    <div class="page-hero">
+      <div class="container">
+        <h1 class="page-hero__title" data-fr="🛡️ Nos Solutions" data-ar="🛡️ حلولنا">🛡️ Nos Solutions</h1>
+        <p class="page-hero__sub" data-fr="7 gammes complètes pour tous vos besoins en sécurité" data-ar="7 مجموعات كاملة لجميع احتياجاتك الأمنية">7 gammes complètes pour tous vos besoins en sécurité</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="solutions-grid">
+          <div class="solution-card">
+            <div class="solution-card__icon" style="background: #e8f5e9;">🚨</div>
+            <div class="solution-card__body">
+              <div class="solution-card__title" data-fr="Alarme Anti-Intrusion" data-ar="إنذار ضد الاقتحام">Alarme Anti-Intrusion</div>
+              <div class="solution-card__desc" data-fr="Systèmes de détection d'intrusion filaires et sans fil pour résidences, commerces et industries. Détection périmétrique, volumétrique et de bris de vitre." data-ar="أنظمة كشف الاقتحام السلكية واللاسلكية للمساكن والمحلات والصناعة. كشف محيطي وحجمي وكسر الزجاج.">Systèmes de détection d'intrusion filaires et sans fil pour résidences, commerces et industries. Détection périmétrique, volumétrique et de bris de vitre.</div>
+              <div class="solution-card__brands"><span class="brand-chip">DSC</span><span class="brand-chip">Johnson Controls</span></div>
+            </div>
+          </div>
+          <div class="solution-card">
+            <div class="solution-card__icon" style="background: #e3f2fd;">📹</div>
+            <div class="solution-card__body">
+              <div class="solution-card__title" data-fr="Vidéosurveillance" data-ar="المراقبة بالفيديو">Vidéosurveillance</div>
+              <div class="solution-card__desc" data-fr="Caméras IP HD à 4K avec vision nocturne et IA embarquée pour distinction personnes/véhicules. Enregistreurs NVR/DVR avec accès à distance." data-ar="كاميرات IP HD إلى 4K مع رؤية ليلية وذكاء اصطناعي لتمييز الأشخاص والمركبات. مسجلات NVR/DVR مع وصول عن بُعد.">Caméras IP HD à 4K avec vision nocturne et IA embarquée pour distinction personnes/véhicules. Enregistreurs NVR/DVR avec accès à distance.</div>
+              <div class="solution-card__brands"><span class="brand-chip">Grundig</span><span class="brand-chip">Panasonic</span><span class="brand-chip">Tyco</span></div>
+            </div>
+          </div>
+          <div class="solution-card">
+            <div class="solution-card__icon" style="background: #ffebee;">🔥</div>
+            <div class="solution-card__body">
+              <div class="solution-card__title" data-fr="Détection Incendie" data-ar="كشف الحريق">Détection Incendie</div>
+              <div class="solution-card__desc" data-fr="Centrales adressables et conventionnelles, détecteurs optiques de fumée, de chaleur et gaz. Conformes EN54 et normes tunisiennes." data-ar="لوحات قابلة للعنونة وتقليدية، كاشفات دخان بصرية وحرارة وغاز. متوافقة مع EN54 والمعايير التونسية.">Centrales adressables et conventionnelles, détecteurs optiques de fumée, de chaleur et gaz. Conformes EN54 et normes tunisiennes.</div>
+              <div class="solution-card__brands"><span class="brand-chip">FireClass</span></div>
+            </div>
+          </div>
+          <div class="solution-card">
+            <div class="solution-card__icon" style="background: #f3e5f5;">🔐</div>
+            <div class="solution-card__body">
+              <div class="solution-card__title" data-fr="Contrôle d'Accès" data-ar="التحكم في الدخول">Contrôle d'Accès</div>
+              <div class="solution-card__desc" data-fr="Contrôleurs multi-portes, lecteurs de badges, biométrie, portiques et tourniquets. Gestion centralisée des droits d'accès." data-ar="وحدات تحكم متعددة الأبواب، قراء البطاقات، بيومتريا، بوابات ودوارة. إدارة مركزية لحقوق الوصول.">Contrôleurs multi-portes, lecteurs de badges, biométrie, portiques et tourniquets. Gestion centralisée des droits d'accès.</div>
+              <div class="solution-card__brands"><span class="brand-chip">Kantech</span></div>
+            </div>
+          </div>
+          <div class="solution-card">
+            <div class="solution-card__icon" style="background: #e8eaf6;">👁️</div>
+            <div class="solution-card__body">
+              <div class="solution-card__title" data-fr="Télésurveillance 24/7" data-ar="المراقبة عن بُعد 24/7">Télésurveillance 24/7</div>
+              <div class="solution-card__desc" data-fr="Surveillance à distance 24h/24, 7j/7 depuis notre centre de télésurveillance à Tunis. Levée de doute, intervention rapide. 8000+ comptes actifs." data-ar="مراقبة عن بُعد 24 ساعة/7 أيام من مركزنا في تونس. التحقق من الإنذارات، تدخل سريع. أكثر من 8000 حساب نشط.">Surveillance à distance 24h/24, 7j/7 depuis notre centre de télésurveillance à Tunis. Levée de doute, intervention rapide. 8000+ comptes actifs.</div>
+              <div class="solution-card__brands"><span class="brand-chip">Shield Technology</span></div>
+            </div>
+          </div>
+          <div class="solution-card">
+            <div class="solution-card__icon" style="background: #fff3e0;">🔊</div>
+            <div class="solution-card__body">
+              <div class="solution-card__title" data-fr="Audiovisuel Professionnel" data-ar="الصوت والصورة المهني">Audiovisuel Professionnel</div>
+              <div class="solution-card__desc" data-fr="Sonorisation de salles de conférence, systèmes de visioconférence, traduction simultanée. Solutions pour hôtels, entreprises et auditoriums." data-ar="تصويت غرف الاجتماعات، أنظمة مؤتمرات الفيديو، الترجمة الفورية. حلول للفنادق والشركات والمدرجات.">Sonorisation de salles de conférence, systèmes de visioconférence, traduction simultanée. Solutions pour hôtels, entreprises et auditoriums.</div>
+              <div class="solution-card__brands"><span class="brand-chip">Shield Technology AV</span></div>
+            </div>
+          </div>
+          <div class="solution-card">
+            <div class="solution-card__icon" style="background: #e0f7fa;">📡</div>
+            <div class="solution-card__body">
+              <div class="solution-card__title" data-fr="Contrôle de Ronde" data-ar="التحكم في الجولات">Contrôle de Ronde</div>
+              <div class="solution-card__desc" data-fr="Systèmes de radios professionnelles PMR pour agents de sécurité. Portée étendue, durée de vie batterie optimisée, résistance aux chocs." data-ar="أجهزة لاسلكي مهنية PMR لعناصر الأمن. مدى موسع، عمر بطارية مُحسَّن، مقاومة للصدمات.">Systèmes de radios professionnelles PMR pour agents de sécurité. Portée étendue, durée de vie batterie optimisée, résistance aux chocs.</div>
+              <div class="solution-card__brands"><span class="brand-chip">Midland</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sectors -->
+        <div style="margin-top: 60px;">
+          <h2 class="section-title text-center" data-fr="Secteurs d'activité" data-ar="قطاعات النشاط">Secteurs d'activité</h2>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 24px;">
+            <div style="background: var(--white); border-radius: 12px; padding: 20px 32px; text-align: center; box-shadow: var(--shadow); min-width: 140px;">
+              <div style="font-size: 2rem; margin-bottom: 8px;">🏨</div>
+              <div style="font-weight: 700; color: var(--blue-dark);" data-fr="Hôtellerie" data-ar="الضيافة">Hôtellerie</div>
+            </div>
+            <div style="background: var(--white); border-radius: 12px; padding: 20px 32px; text-align: center; box-shadow: var(--shadow); min-width: 140px;">
+              <div style="font-size: 2rem; margin-bottom: 8px;">🏪</div>
+              <div style="font-weight: 700; color: var(--blue-dark);" data-fr="Commerce" data-ar="التجارة">Commerce</div>
+            </div>
+            <div style="background: var(--white); border-radius: 12px; padding: 20px 32px; text-align: center; box-shadow: var(--shadow); min-width: 140px;">
+              <div style="font-size: 2rem; margin-bottom: 8px;">🏭</div>
+              <div style="font-weight: 700; color: var(--blue-dark);" data-fr="Industrie" data-ar="الصناعة">Industrie</div>
+            </div>
+            <div style="background: var(--white); border-radius: 12px; padding: 20px 32px; text-align: center; box-shadow: var(--shadow); min-width: 140px;">
+              <div style="font-size: 2rem; margin-bottom: 8px;">🏥</div>
+              <div style="font-weight: 700; color: var(--blue-dark);" data-fr="Santé" data-ar="الصحة">Santé</div>
+            </div>
+            <div style="background: var(--white); border-radius: 12px; padding: 20px 32px; text-align: center; box-shadow: var(--shadow); min-width: 140px;">
+              <div style="font-size: 2rem; margin-bottom: 8px;">🏢</div>
+              <div style="font-weight: 700; color: var(--blue-dark);" data-fr="Tertiaire" data-ar="الخدمات">Tertiaire</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PAGE: SHOP ── -->
+  <section id="page-shop" class="hidden">
+    <div class="page-hero">
+      <div class="container">
+        <h1 class="page-hero__title" data-fr="🛒 Boutique" data-ar="🛒 المتجر">🛒 Boutique</h1>
+        <p class="page-hero__sub" data-fr="Livraison à domicile 24-72h — Paiement à la livraison disponible" data-ar="التوصيل للمنزل 24-72 ساعة — الدفع عند الاستلام متاح">Livraison à domicile 24-72h — Paiement à la livraison disponible</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="shop-layout">
+          <aside class="shop-sidebar">
+            <div class="sidebar-title" data-fr="Filtres" data-ar="تصفية">Filtres</div>
+            <div class="filter-group">
+              <div class="filter-label" data-fr="Catégories" data-ar="الفئات">Catégories</div>
+              <div class="filter-option active" onclick="filterShop('all')" data-fr="Toutes les catégories" data-ar="جميع الفئات">Toutes les catégories</div>
+              <div class="filter-option" onclick="filterShop('alarmes')" data-fr="🚨 Alarmes intrusion" data-ar="🚨 إنذار الاقتحام">🚨 Alarmes intrusion</div>
+              <div class="filter-option" onclick="filterShop('videosurveillance')" data-fr="📹 Vidéosurveillance" data-ar="📹 المراقبة">📹 Vidéosurveillance</div>
+              <div class="filter-option" onclick="filterShop('incendie')" data-fr="🔥 Détection incendie" data-ar="🔥 كشف الحريق">🔥 Détection incendie</div>
+              <div class="filter-option" onclick="filterShop('controle-acces')" data-fr="🔐 Contrôle d'accès" data-ar="🔐 التحكم بالدخول">🔐 Contrôle d'accès</div>
+            </div>
+            <div class="filter-group">
+              <div class="filter-label" data-fr="Disponibilité" data-ar="التوفر">Disponibilité</div>
+              <div class="filter-option" onclick="filterByStock('all')" data-fr="Tous les produits" data-ar="جميع المنتجات">Tous les produits</div>
+              <div class="filter-option" onclick="filterByStock('available')" data-fr="En stock" data-ar="متوفر">En stock</div>
+              <div class="filter-option" onclick="filterByStock('on_order')" data-fr="Sur commande" data-ar="عند الطلب">Sur commande</div>
+            </div>
+            <div style="background: var(--off-white); border-radius: var(--radius); padding: 16px; margin-top: 8px;">
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--blue-dark); margin-bottom: 8px;">📦 Livraison</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;" data-fr="• Tunis : 24h — 15 DT<br>• Autre région : 48-72h — 15 DT<br>• Gratuit dès 500 DT" data-ar="• تونس: 24 ساعة — 15 دت<br>• مناطق أخرى: 48-72 ساعة — 15 دت<br>• مجاني من 500 دت">• Tunis : 24h — 15 DT<br>• Autre région : 48-72h — 15 DT<br>• Gratuit dès 500 DT</div>
+            </div>
+          </aside>
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <div id="shopResultCount" style="font-size: 0.9rem; color: var(--text-muted);"></div>
+              <input type="search" placeholder="Rechercher un produit..." class="form-input" style="width: 260px; padding: 8px 14px;" oninput="searchProducts(this.value)" data-placeholder-fr="Rechercher un produit..." data-placeholder-ar="البحث عن منتج...">
+            </div>
+            <div class="products-grid" id="shopGrid">
+              <div class="loader"><div class="spinner"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PAGE: PRODUCT DETAIL ── -->
+  <section id="page-product" class="hidden">
+    <div class="section">
+      <div class="container">
+        <div class="breadcrumb">
+          <a onclick="showPage('home')">Accueil</a> <span>/</span>
+          <a onclick="showPage('shop')" data-fr="Boutique" data-ar="المتجر">Boutique</a> <span>/</span>
+          <span id="productBreadcrumb"></span>
+        </div>
+        <div id="productDetail" class="product-detail"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PAGE: CART ── -->
+  <section id="page-cart" class="hidden">
+    <div class="page-hero">
+      <div class="container">
+        <h1 class="page-hero__title" data-fr="🛒 Mon Panier" data-ar="🛒 سلتي">🛒 Mon Panier</h1>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div id="cartContent"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PAGE: CHECKOUT ── -->
+  <section id="page-checkout" class="hidden">
+    <div class="page-hero">
+      <div class="container">
+        <h1 class="page-hero__title" data-fr="✅ Commander" data-ar="✅ إتمام الطلب">✅ Commander</h1>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="checkout-layout">
+          <div>
+            <div class="form-card" style="margin-bottom: 24px;">
+              <h3>👤 <span data-fr="Informations personnelles" data-ar="المعلومات الشخصية">Informations personnelles</span></h3>
+              <div class="form-grid">
+                <div class="form-group"><label class="form-label" data-fr="Nom complet *" data-ar="الاسم الكامل *">Nom complet *</label><input type="text" id="co-name" class="form-input" required /></div>
+                <div class="form-group"><label class="form-label" data-fr="Email *" data-ar="البريد الإلكتروني *">Email *</label><input type="email" id="co-email" class="form-input" required /></div>
+                <div class="form-group"><label class="form-label" data-fr="Téléphone *" data-ar="الهاتف *">Téléphone *</label><input type="tel" id="co-phone" class="form-input" required placeholder="+216 XX XXX XXX" /></div>
+                <div class="form-group"><label class="form-label" data-fr="Région *" data-ar="المنطقة *">Région *</label>
+                  <select id="co-region" class="form-input">
+                    <option value="Tunis">Tunis (24h)</option>
+                    <option value="Sfax">Sfax (48-72h)</option>
+                    <option value="Sousse">Sousse (48-72h)</option>
+                    <option value="Monastir">Monastir (48-72h)</option>
+                    <option value="Bizerte">Bizerte (48-72h)</option>
+                    <option value="Ariana">Ariana (24h)</option>
+                    <option value="Ben Arous">Ben Arous (24h)</option>
+                    <option value="Autre">Autre (48-72h)</option>
+                  </select>
+                </div>
+                <div class="form-group full"><label class="form-label" data-fr="Adresse *" data-ar="العنوان *">Adresse *</label><input type="text" id="co-address" class="form-input" required /></div>
+                <div class="form-group"><label class="form-label" data-fr="Ville *" data-ar="المدينة *">Ville *</label><input type="text" id="co-city" class="form-input" required /></div>
+                <div class="form-group full"><label class="form-label" data-fr="Notes (optionnel)" data-ar="ملاحظات (اختياري)">Notes (optionnel)</label><textarea id="co-notes" class="form-input" rows="3"></textarea></div>
+              </div>
+            </div>
+            <div class="form-card">
+              <h3>💳 <span data-fr="Mode de paiement" data-ar="طريقة الدفع">Mode de paiement</span></h3>
+              <div class="payment-options">
+                <div class="payment-option selected" id="pay-cod" onclick="selectPayment('cash_on_delivery')">
+                  <div class="payment-option-title">💵 <span data-fr="Paiement à la livraison" data-ar="الدفع عند الاستلام">Paiement à la livraison</span></div>
+                  <div class="payment-option-sub" data-fr="Espèces à la réception" data-ar="نقداً عند الاستلام">Espèces à la réception</div>
+                </div>
+                <div class="payment-option" id="pay-online" onclick="selectPayment('online')">
+                  <div class="payment-option-title">🔒 <span data-fr="Paiement en ligne" data-ar="الدفع الإلكتروني">Paiement en ligne</span></div>
+                  <div class="payment-option-sub" data-fr="CIB · Carte bancaire · eDinar" data-ar="CIB · بطاقة بنكية · eDinar">CIB · Carte bancaire · eDinar</div>
+                </div>
+              </div>
+              <div id="online-payment-form" class="hidden" style="margin-top: 20px; padding: 20px; background: var(--off-white); border-radius: var(--radius); border: 2px dashed var(--border);">
+                <div style="text-align: center; color: var(--text-muted);">
+                  <div style="font-size: 2rem;">🔒</div>
+                  <div style="font-weight: 600; color: var(--blue-dark);" data-fr="Paiement 100% sécurisé" data-ar="دفع آمن 100%">Paiement 100% sécurisé</div>
+                  <div style="font-size: 0.85rem; margin-top: 8px;" data-fr="Vous serez redirigé vers notre plateforme de paiement sécurisée" data-ar="ستحال إلى منصة الدفع الآمن الخاصة بنا">Vous serez redirigé vers notre plateforme de paiement sécurisée</div>
+                  <div style="display: flex; justify-content: center; gap: 12px; margin-top: 16px; font-size: 1.5rem;">💳 🏦 📱</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="cart-summary" id="checkoutSummary">
+              <h3 data-fr="Récapitulatif" data-ar="الملخص">Récapitulatif</h3>
+              <div id="checkoutSummaryContent"></div>
+              <button class="btn btn--primary btn--full" style="margin-top: 20px;" onclick="placeOrder()" data-fr="✅ Confirmer la commande" data-ar="✅ تأكيد الطلب">✅ Confirmer la commande</button>
+              <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 12px;" data-fr="🔒 Commande sécurisée" data-ar="🔒 طلب آمن">🔒 Commande sécurisée</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PAGE: CONFIRMATION ── -->
+  <section id="page-confirmation" class="hidden">
+    <div class="section">
+      <div class="container">
+        <div class="confirmation-box">
+          <div class="confirmation-icon">✅</div>
+          <h2 style="color: var(--blue-dark); font-size: 1.8rem; font-weight: 900;" data-fr="Commande confirmée !" data-ar="تم تأكيد الطلب!">Commande confirmée !</h2>
+          <p style="color: var(--text-muted); margin: 12px 0;" data-fr="Merci pour votre confiance. Votre commande a été enregistrée." data-ar="شكراً لثقتك. تم تسجيل طلبك.">Merci pour votre confiance. Votre commande a été enregistrée.</p>
+          <div class="confirmation-num" id="confirmOrderNum">AG-2025-00001</div>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;" data-fr="Conservez ce numéro pour suivre votre commande." data-ar="احتفظ بهذا الرقم لتتبع طلبك.">Conservez ce numéro pour suivre votre commande.</p>
+          <div id="confirmDeliveryInfo" style="background: var(--off-white); border-radius: var(--radius); padding: 16px; margin-bottom: 28px; font-size: 0.9rem;"></div>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button class="btn btn--primary" onclick="showPage('tracking')" data-fr="📦 Suivre ma commande" data-ar="📦 تتبع طلبي">📦 Suivre ma commande</button>
+            <button class="btn btn--outline" onclick="showPage('home')" data-fr="🏠 Retour à l'accueil" data-ar="🏠 العودة للرئيسية">🏠 Retour à l'accueil</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PAGE: TRACKING ── -->
+  <section id="page-tracking" class="hidden">
+    <div class="page-hero">
+      <div class="container">
+        <h1 class="page-hero__title" data-fr="📦 Suivi de commande" data-ar="📦 تتبع الطلب">📦 Suivi de commande</h1>
+        <p class="page-hero__sub" data-fr="Entrez votre numéro de commande pour voir son statut" data-ar="أدخل رقم طلبك لرؤية حالته">Entrez votre numéro de commande pour voir son statut</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="tracking-form">
+          <input type="text" id="trackingInput" class="form-input" placeholder="Ex: AG-2025-00001" style="text-transform: uppercase;" />
+          <button class="btn btn--primary" onclick="trackOrder()" data-fr="Rechercher" data-ar="بحث">Rechercher</button>
+        </div>
+        <div id="trackingResult"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PAGE: ABOUT ── -->
+  <section id="page-about" class="hidden">
+    <div class="page-hero">
+      <div class="container">
+        <h1 class="page-hero__title" data-fr="📋 À Propos de Shield Technology" data-ar="📋 عن Shield Technology">📋 À Propos de Shield Technology</h1>
+        <p class="page-hero__sub" data-fr="Votre expert local en sécurité électronique à Sousse." data-ar="خبيرك المحلي في الأمن الإلكتروني بسوسة.">Votre expert local en sécurité électronique à Sousse.</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="about-grid">
+          <div>
+            <h2 class="section-title" data-fr="Notre Histoire" data-ar="تاريخنا">Notre Histoire</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px; line-height: 1.8;" data-fr="Basée à Sousse, Shield Technology est votre partenaire de confiance en sécurité électronique. Nous proposons des solutions d'alarme, de vidéosurveillance, de détection incendie et de contrôle d'accès pour les particuliers, commerces et entreprises." data-ar="تتخذ Shield Technology من سوسة مقراً لها، وهي شريكك الموثوق في مجال الأمن الإلكتروني. نقدم حلول الإنذار، المراقبة بالكاميرا، كشف الحريق والتحكم في الدخول للأفراد والمحلات والشركات.">
+              Basée à Sousse, Shield Technology est votre partenaire de confiance en sécurité électronique. Nous proposons des solutions d'alarme, de vidéosurveillance, de détection incendie et de contrôle d'accès pour les particuliers, commerces et entreprises.
+            </p>
+            <p style="color: var(--text-muted); line-height: 1.8;" data-fr="Notre engagement : des équipements certifiés des meilleures marques mondiales (DSC, Grundig, Panasonic, FireClass, Kantech), un service après-vente réactif et une installation soignée par nos techniciens qualifiés." data-ar="التزامنا: معدات معتمدة من أفضل الماركات العالمية (DSC، Grundig، Panasonic، FireClass، Kantech)، خدمة ما بعد البيع السريعة وتركيب متقن من قِبل فنيينا المؤهلين.">
+              Notre engagement : des équipements certifiés des meilleures marques mondiales, un service après-vente réactif et une installation soignée par nos techniciens qualifiés.
+            </p>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div style="background: var(--blue-dark); color: var(--white); border-radius: var(--radius-lg); padding: 28px; text-align: center;">
+              <div style="font-size: 2.5rem; font-weight: 900; color: var(--orange);">1993</div>
+              <div style="font-size: 0.85rem; opacity: 0.75; margin-top: 8px;" data-fr="Année de fondation" data-ar="سنة التأسيس">Année de fondation</div>
+            </div>
+            <div style="background: var(--orange); color: var(--white); border-radius: var(--radius-lg); padding: 28px; text-align: center;">
+              <div style="font-size: 2.5rem; font-weight: 900;">50+</div>
+              <div style="font-size: 0.85rem; opacity: 0.85; margin-top: 8px;" data-fr="Experts" data-ar="خبراء">Experts</div>
+            </div>
+            <div style="background: var(--off-white); border-radius: var(--radius-lg); padding: 28px; text-align: center;">
+              <div style="font-size: 2.5rem; font-weight: 900; color: var(--blue-dark);">30%</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;" data-fr="CA généré par le SAV" data-ar="من رقم الأعمال عبر خدمة ما بعد البيع">CA généré par le SAV</div>
+            </div>
+            <div style="background: var(--off-white); border-radius: var(--radius-lg); padding: 28px; text-align: center;">
+              <div style="font-size: 2.5rem; font-weight: 900; color: var(--blue-dark);">NDAA</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;" data-fr="Certifié" data-ar="معتمد">Certifié</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Values -->
+        <div style="margin-top: 70px;">
+          <h2 class="section-title text-center" data-fr="Nos Valeurs" data-ar="قيمنا">Nos Valeurs</h2>
+          <div class="values-grid">
+            <div class="value-card"><div class="value-card__icon">🤝</div><div class="value-card__title" data-fr="Confiance" data-ar="الثقة">Confiance</div></div>
+            <div class="value-card"><div class="value-card__icon">💪</div><div class="value-card__title" data-fr="Engagement" data-ar="الالتزام">Engagement</div></div>
+            <div class="value-card"><div class="value-card__icon">🔒</div><div class="value-card__title" data-fr="Discrétion" data-ar="التحفظ">Discrétion</div></div>
+            <div class="value-card"><div class="value-card__icon">⚡</div><div class="value-card__title" data-fr="Réactivité" data-ar="سرعة الاستجابة">Réactivité</div></div>
+            <div class="value-card"><div class="value-card__icon">🌍</div><div class="value-card__title" data-fr="Proximité" data-ar="القرب">Proximité</div></div>
+            <div class="value-card"><div class="value-card__icon">🏆</div><div class="value-card__title" data-fr="Excellence" data-ar="التميز">Excellence</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PAGE: CONTACT ── -->
+  <section id="page-contact" class="hidden">
+    <div class="page-hero">
+      <div class="container">
+        <h1 class="page-hero__title" data-fr="📞 Contactez-nous" data-ar="📞 اتصل بنا">📞 Contactez-nous</h1>
+        <p class="page-hero__sub" data-fr="Notre équipe est disponible 24h/24, 7j/7" data-ar="فريقنا متاح 24 ساعة/7 أيام">Notre équipe est disponible 24h/24, 7j/7</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="contact-layout">
+          <div>
+            <div class="contact-info-item">
+              <div class="contact-info-item__icon">📍</div>
+              <div><div class="contact-info-item__title" data-fr="Adresse" data-ar="العنوان">Adresse</div><div class="contact-info-item__text">Rue El Kairouan, Sousse, Tunisie</div></div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-info-item__icon">📞</div>
+              <div><div class="contact-info-item__title" data-fr="Téléphone" data-ar="الهاتف">Téléphone</div><div class="contact-info-item__text"><a href="tel:+21694020700" style="color:inherit;">+216 94 020 700</a></div></div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-info-item__icon">💬</div>
+              <div><div class="contact-info-item__title">WhatsApp</div><div class="contact-info-item__text"><a href="https://wa.me/21694020700" target="_blank" style="color:#25D366;font-weight:600;">+216 94 020 700</a></div></div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-info-item__icon">✉️</div>
+              <div><div class="contact-info-item__title">Email</div><div class="contact-info-item__text"><a href="mailto:shield@topnet.tn" style="color:inherit;">shield@topnet.tn</a></div></div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-info-item__icon">⏰</div>
+              <div><div class="contact-info-item__title" data-fr="Horaires" data-ar="أوقات العمل">Horaires</div><div class="contact-info-item__text" data-fr="Lun-Sam : 8h00 – 18h00<br>WhatsApp : 24h/24" data-ar="الإثنين-السبت: 8ص – 6م<br>واتساب: 24 ساعة">Lun-Sam : 8h00 – 18h00<br>WhatsApp : 24h/24</div></div>
+            </div>
+            <!-- Map placeholder -->
+            <div style="background: var(--off-white); border-radius: var(--radius-lg); height: 220px; display: flex; align-items: center; justify-content: center; margin-top: 20px; border: 2px dashed var(--border);">
+              <div style="text-align: center; color: var(--text-muted);">
+                <div style="font-size: 2.5rem;">🗺️</div>
+                <div style="font-size: 0.85rem; margin-top: 8px;">Rue El Kairouan, Sousse</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-card">
+            <h3 data-fr="Envoyer un message" data-ar="أرسل رسالة">Envoyer un message</h3>
+            <form onsubmit="submitContact(event)">
+              <div style="display: flex; flex-direction: column; gap: 16px;">
+                <div class="form-group"><label class="form-label" data-fr="Nom complet *" data-ar="الاسم الكامل *">Nom complet *</label><input type="text" class="form-input" id="c-name" required /></div>
+                <div class="form-group"><label class="form-label">Email *</label><input type="email" class="form-input" id="c-email" required /></div>
+                <div class="form-group"><label class="form-label" data-fr="Téléphone" data-ar="الهاتف">Téléphone</label><input type="tel" class="form-input" id="c-phone" /></div>
+                <div class="form-group">
+                  <label class="form-label" data-fr="Sujet *" data-ar="الموضوع *">Sujet *</label>
+                  <select class="form-input" id="c-subject">
+                    <option data-fr="Demande de devis" data-ar="طلب عرض سعر">Demande de devis</option>
+                    <option data-fr="Support technique" data-ar="الدعم التقني">Support technique</option>
+                    <option data-fr="Information produit" data-ar="معلومات المنتج">Information produit</option>
+                    <option data-fr="Autre" data-ar="أخرى">Autre</option>
+                  </select>
+                </div>
+                <div class="form-group"><label class="form-label" data-fr="Message *" data-ar="الرسالة *">Message *</label><textarea class="form-input" id="c-message" rows="5" required></textarea></div>
+                <button type="submit" class="btn btn--primary btn--full" data-fr="✉️ Envoyer le message" data-ar="✉️ إرسال الرسالة">✉️ Envoyer le message</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="/logo.png" alt="Shield Technology" style="width:42px;height:42px;object-fit:contain;border-radius:4px;" />
+            <div style="font-size: 1.1rem; font-weight: 800; color: var(--white);">Shield Technology</div>
+          </div>
+        </div>
+        <p class="footer__desc" data-fr="Votre espace sous protection, votre esprit en paix. Sécurité électronique à Sousse, Tunisie." data-ar="مساحتك تحت الحماية، وعقلك في سلام. أمن إلكتروني في سوسة، تونس.">Votre espace sous protection, votre esprit en paix. Sécurité électronique à Sousse, Tunisie.</p>
+        <div class="footer__social">
+          <a class="social-btn" href="#" title="Facebook">f</a>
+          <a class="social-btn" href="#" title="LinkedIn">in</a>
+          <a class="social-btn" href="#" title="YouTube">▶</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer__heading" data-fr="Navigation" data-ar="التنقل">Navigation</div>
+        <ul class="footer__links">
+          <li><a onclick="showPage('home')" data-fr="Accueil" data-ar="الرئيسية">Accueil</a></li>
+          <li><a onclick="showPage('solutions')" data-fr="Solutions" data-ar="الحلول">Solutions</a></li>
+          <li><a onclick="showPage('shop')" data-fr="Boutique" data-ar="المتجر">Boutique</a></li>
+          <li><a onclick="showPage('about')" data-fr="À Propos" data-ar="عن الشركة">À Propos</a></li>
+          <li><a onclick="showPage('contact')">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__heading" data-fr="Produits" data-ar="المنتجات">Produits</div>
+        <ul class="footer__links">
+          <li><a onclick="filterShop('alarmes')" data-fr="Alarmes intrusion" data-ar="إنذار الاقتحام">Alarmes intrusion</a></li>
+          <li><a onclick="filterShop('videosurveillance')" data-fr="Vidéosurveillance" data-ar="المراقبة">Vidéosurveillance</a></li>
+          <li><a onclick="filterShop('incendie')" data-fr="Détection incendie" data-ar="كشف الحريق">Détection incendie</a></li>
+          <li><a onclick="filterShop('controle-acces')" data-fr="Contrôle d'accès" data-ar="التحكم بالدخول">Contrôle d'accès</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__heading" data-fr="Contact" data-ar="اتصل بنا">Contact</div>
+        <ul class="footer__links" style="line-height: 2;">
+          <li>📍 Rue El Kairouan, Sousse</li>
+          <li>📞 <a href="tel:+21694020700">+216 94 020 700</a></li>
+          <li>💬 <a href="https://wa.me/21694020700" target="_blank" style="color:#25D366;">WhatsApp</a></li>
+          <li>✉️ <a href="mailto:shield@topnet.tn">shield@topnet.tn</a></li>
+          <li>⏰ Lun-Sam 8h – 18h</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span data-fr="© 2026 Shield Technology — Tous droits réservés" data-ar="© 2026 Shield Technology — جميع الحقوق محفوظة">© 2026 Shield Technology — Tous droits réservés</span>
+      <a href="/admin" style="color: rgba(255,255,255,0.3); font-size: 0.75rem;">Admin</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════ AUTH MODAL ══════════════════ -->
+<div class="modal-overlay hidden" id="authModal">
+  <div class="modal">
+    <div class="modal__header">
+      <div class="modal__title" id="authModalTitle" data-fr="Mon compte" data-ar="حسابي">Mon compte</div>
+      <button class="modal__close" onclick="closeAuthModal()">✕</button>
+    </div>
+    <div class="modal__body" id="authModalBody"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ TOAST CONTAINER ══════════════════ -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ══════════════════ WHATSAPP FLOATING BUTTON ══════════════════ -->
+<a href="https://wa.me/21694020700" target="_blank" rel="noopener"
+   style="position:fixed;bottom:24px;right:24px;z-index:9999;background:#25D366;color:#fff;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.5);font-size:1.8rem;text-decoration:none;transition:transform 0.2s ease;"
+   onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"
+   title="Contactez-nous sur WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="30" height="30">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<script src="/js/products.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
