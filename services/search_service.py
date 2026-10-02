@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Semantic Search & Recommendation Service.
 Translates unstructured natural language inquiries into dense embeddings,
 executes cosine similarity vector search, and delivers contextual upsell/hardware recommendations.

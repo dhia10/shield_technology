@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Pydantic DTOs & Validation Schemas.
 Enforces static contracts and validation across HTTP boundaries (Zero "Vibe Coding").
 """

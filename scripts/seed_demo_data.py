@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Synthetic Demo Data Seeder.
 Generates 10 realistic, anonymized commercial equipment sheets & SLA service packages.
 Enables instant local execution and automated testing without external dependencies.

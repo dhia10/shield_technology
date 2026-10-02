@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Outbound Webhook Client.
 Dispatches enterprise events (e.g., Qualified Leads) to external orchestration platforms (n8n, Slack, CRM).
 Includes HMAC-SHA256 signature verification headers, exponential backoff, and mock mode.

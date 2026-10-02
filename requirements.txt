@@ -1,4 +1,4 @@
-﻿# Shield Technology Data & AI Platform - Production Dependencies
+# Shield Technology Data & AI Platform - Production Dependencies
 fastapi==0.115.11
 uvicorn[standard]==0.35.0
 pydantic==2.11.7

@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Telemetry API Controller.
 High-throughput ingestion endpoints for user behavioral interactions.
 """

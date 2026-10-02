@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Configuration Management.
 Zero-secret architecture adhering to 12-Factor App principles.
 Loads from environment variables and .env with sensible defaults for local development.

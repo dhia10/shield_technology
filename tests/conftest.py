@@ -1,4 +1,4 @@
-﻿"""
+"""
 Pytest Test Fixtures and Global Harness.
 Mocks external I/O, isolates SQLite storage, and provides FastAPI TestClients.
 """

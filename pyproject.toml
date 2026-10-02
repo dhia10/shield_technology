@@ -1,4 +1,4 @@
-﻿[project]
+[project]
 name = "shield-technology-platform"
 version = "1.0.0"
 description = "Shield Technology Data & AI Platform - Telemetry Ingestion, Semantic Search & Lead Scoring"

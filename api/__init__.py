@@ -1,4 +1,4 @@
-﻿"""Shield Technology API Package."""
+"""Shield Technology API Package."""
 from api.app import app
 
 __all__ = ["app"]

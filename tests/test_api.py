@@ -1,4 +1,4 @@
-﻿"""
+"""
 Integration tests for Shield Technology FastAPI Endpoints.
 Verifies HTTP status codes, JSON response schemas, and error boundaries.
 """

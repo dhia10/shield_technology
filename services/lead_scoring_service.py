@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Lead Qualification & Scoring Pipeline.
 Implements a deterministic multi-factor scoring engine (0-100) evaluating:
 1. Contact completeness & corporate integrity

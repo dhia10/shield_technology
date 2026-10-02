@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Semantic Embedding Adapters.
 Provides an abstract contract for dense vector representations with:
 1. SentenceTransformers adapter (when sentence-transformers is installed)

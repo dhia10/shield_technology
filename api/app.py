@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Data & AI Platform - FastAPI Application Entrypoint.
 Exposes OpenAPI 3.1 documentation, health metrics, and v1 REST controllers.
 """

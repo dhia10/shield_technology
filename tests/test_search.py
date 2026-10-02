@@ -1,4 +1,4 @@
-﻿"""
+"""
 Unit tests for Shield Technology Semantic Search & Recommendation Engine.
 Validates cosine similarity ranking, category pruning, confidence thresholds, and recommendations.
 """

@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Semantic Search & AI Recommendation API Controller.
 Dense vector retrieval and cross-sell hardware synergy endpoints.
 """

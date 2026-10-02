@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Vector Store Infrastructure.
 Abstract vector storage interface and high-performance thread-safe Cosine Vector Store implementation.
 Supports metadata filtering, threshold pruning, and SQLite/JSON persistence.

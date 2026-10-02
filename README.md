@@ -1,4 +1,4 @@
-﻿# Shield Technology — Data & AI Platform
+# Shield Technology — Data & AI Platform
 
 [![CI/CD Pipeline](https://github.com/dhia10/shield_technology/actions/workflows/ci.yml/badge.svg)](https://github.com/dhia10/shield_technology/actions)
 [![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11-blue.svg?logo=python)](https://www.python.org/)

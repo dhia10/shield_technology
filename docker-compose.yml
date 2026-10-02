@@ -1,4 +1,4 @@
-﻿services:
+services:
   shield-api:
     build:
       context: .

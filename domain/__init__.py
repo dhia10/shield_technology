@@ -1,4 +1,4 @@
-﻿"""Shield Technology Domain Package."""
+"""Shield Technology Domain Package."""
 from domain.enums import (
     ClientType,
     EquipmentCategory,

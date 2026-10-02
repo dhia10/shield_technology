@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Ingestion & Proprietary Telemetry Service.
 High-throughput, asynchronous event buffering & batching engine designed to handle traffic spikes.
 Provides real-time pipeline observability and Zero-PII anonymization.

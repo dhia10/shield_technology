@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Domain Entities.
 Framework-agnostic business objects encapsulating state and business invariants.
 """

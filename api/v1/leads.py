@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Lead Qualification API Controller.
 RFQ evaluation, deterministic opportunity scoring, and automated orchestration dispatch.
 """

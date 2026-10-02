@@ -1,4 +1,4 @@
-﻿"""
+"""
 Shield Technology Domain Enums.
 Strictly typed business domain definitions for Security & IT Operations.
 """

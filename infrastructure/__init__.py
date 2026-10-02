@@ -1,4 +1,4 @@
-﻿"""Shield Technology Infrastructure Package."""
+"""Shield Technology Infrastructure Package."""
 from infrastructure.config import settings
 from infrastructure.embeddings import (
     DeterministicSemanticEmbeddingEngine,
