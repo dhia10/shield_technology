@@ -1,0 +1,32 @@
+﻿services:
+  shield-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shield_data_ai_platform
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=Shield Technology Data & AI Platform
+      - ENVIRONMENT=production
+      - HOST=0.0.0.0
+      - PORT=8000
+      - TELEMETRY_BUFFER_CAPACITY=1000
+      - TELEMETRY_BATCH_FLUSH_SIZE=50
+      - TELEMETRY_FLUSH_INTERVAL_SECONDS=5.0
+      - MOCK_WEBHOOKS=true
+      - N8N_DISPATCH_WEBHOOK_URL=${N8N_DISPATCH_WEBHOOK_URL:-}
+      - WEBHOOK_SIGNING_SECRET=${WEBHOOK_SIGNING_SECRET:-}
+    volumes:
+      - shield_data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  shield_data:
+    driver: local
