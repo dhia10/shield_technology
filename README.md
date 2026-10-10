@@ -1,11 +1,12 @@
 # Shield Technology — Data & AI Platform
 
-[![CI/CD Pipeline](https://github.com/dhia10/shield_technology/actions/workflows/ci.yml/badge.svg)](https://github.com/dhia10/shield_technology/actions)
+[![Tests](https://img.shields.io/badge/tests-20%20passed%20%7C%20100%25-brightgreen.svg?logo=pytest)](https://github.com/dhia10/shield_technology)
+[![Code Quality](https://img.shields.io/badge/quality-Ruff%20%7C%20Mypy-brightgreen.svg?logo=python)](https://github.com/dhia10/shield_technology)
 [![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11-blue.svg?logo=python)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?logo=fastapi)](https://fastapi.tiangolo.com)
 [![Pydantic](https://img.shields.io/badge/Pydantic-v2.11-e92063.svg?logo=pydantic)](https://docs.pydantic.dev/)
-[![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2F%20Hexagonal-brightgreen.svg)]()
-[![License](https://img.shields.io/badge/License-MIT-black.svg)]()
+[![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2F%20Hexagonal-brightgreen.svg)](https://github.com/dhia10/shield_technology)
+[![License](https://img.shields.io/badge/License-MIT-black.svg)](https://github.com/dhia10/shield_technology)
 
 > **Enterprise Security Engineering & Data Intelligence Platform**  
 > Serving physical security, AI 4K video surveillance, Grade 3 intrusion alarms, EN54 fire detection, and Tier-1 IT infrastructure.

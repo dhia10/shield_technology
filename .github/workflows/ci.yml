@@ -1,11 +1,9 @@
 name: Shield Technology CI/CD Pipeline
 
 on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
-  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+  # push:
+  #   branches: [ main, master ]
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab once billing hold is cleared
 
 # Prevent redundant concurrent runs on rapid pushes
 concurrency:
