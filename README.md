@@ -1,6 +1,5 @@
 # Shield Technology — Data & AI Platform
 
-[![CI/CD Pipeline](https://github.com/dhia10/shield_technology/actions/workflows/ci.yml/badge.svg)](https://github.com/dhia10/shield_technology/actions)
 [![Tests](https://img.shields.io/badge/tests-20%20passed%20%7C%20100%25-brightgreen.svg?logo=pytest)](https://github.com/dhia10/shield_technology)
 [![Code Quality](https://img.shields.io/badge/quality-Ruff%20%7C%20Mypy-brightgreen.svg?logo=python)](https://github.com/dhia10/shield_technology)
 [![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11-blue.svg?logo=python)](https://www.python.org/)
