@@ -558,7 +558,7 @@ def generate_07_dashboard_preview():
       <div class="shield-badge">SHIELD</div>
       <div class="title-area">
         <h1>Shield Technology — Télémétrie & Intelligence de Sécurité</h1>
-        <p>Projet de Fin d'Études / Stage Ingénieur ESPRIT (Juin – Septembre 2026)</p>
+        <p>Stage Ingénieur ESPRIT — Spécialité Data Science (Juin – Septembre 2026)</p>
       </div>
     </div>
     <div class="status-badges">

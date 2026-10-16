@@ -196,7 +196,7 @@ class MLAnomalyScorer:
 
         return score, is_anomaly
 
-    def evaluate_model(self, n_samples: int = 1500) -> Dict[str, Any]:
+    def evaluate_model(self, n_samples: int = 1000) -> Dict[str, Any]:
         """Evaluates model performance against held-out ground truth data."""
         np.random.seed(123)
         n_normal = int(n_samples * 0.85)
@@ -302,31 +302,37 @@ class MLAnomalyScorer:
         plt.close(fig)
         generated_files.append(str(p1))
 
-        # 2. Confusion Matrix Heatmap
-        eval_res = self.evaluate_model()
+        # 2. Confusion Matrix Heatmap (Fond clair académique lisible à l'impression)
+        eval_res = self.evaluate_model(n_samples=1000)
         cm_data = np.array([
             [eval_res["confusion_matrix"]["true_negative"], eval_res["confusion_matrix"]["false_positive"]],
             [eval_res["confusion_matrix"]["false_negative"], eval_res["confusion_matrix"]["true_positive"]]
         ])
 
-        fig, ax = plt.subplots(figsize=(7, 5.5), dpi=300)
-        sns.heatmap(
-            cm_data,
-            annot=True,
-            fmt="d",
-            cmap="Blues",
-            cbar=False,
-            xticklabels=["Prédit Bénin", "Prédit Attaque"],
-            yticklabels=["Réel Bénin", "Réel Attaque"],
-            ax=ax,
-            annot_kws={"size": 14, "weight": "bold", "color": "white"}
-        )
-        ax.set_title(f"Matrice de Confusion ML — F1-Score : {eval_res['f1_score']}%", fontsize=12, fontweight="bold", pad=12, color="#06b6d4")
-        fig.tight_layout()
-        p2 = output_dir / "02_confusion_matrix.png"
-        fig.savefig(p2)
-        plt.close(fig)
-        generated_files.append(str(p2))
+        with plt.style.context("default"):
+            fig, ax = plt.subplots(figsize=(7, 5.5), dpi=300)
+            fig.patch.set_facecolor("#ffffff")
+            ax.set_facecolor("#ffffff")
+            sns.heatmap(
+                cm_data,
+                annot=True,
+                fmt="d",
+                cmap="Blues",
+                cbar=False,
+                xticklabels=["Prédit Bénin", "Prédit Attaque"],
+                yticklabels=["Réel Bénin", "Réel Attaque"],
+                ax=ax,
+                annot_kws={"size": 15, "weight": "bold"}
+            )
+            ax.set_title(f"Matrice de Confusion ML — F1-Score : {eval_res['f1_score']}%", fontsize=12, fontweight="bold", pad=12, color="#0f172a")
+            ax.set_xlabel("Classe Prédite par le Modèle", fontsize=10, fontweight="bold", color="#334155")
+            ax.set_ylabel("Classe Réelle (Vérité Terrain)", fontsize=10, fontweight="bold", color="#334155")
+            ax.tick_params(colors="#334155", labelsize=10)
+            fig.tight_layout()
+            p2 = output_dir / "02_confusion_matrix.png"
+            fig.savefig(p2, facecolor="#ffffff", edgecolor="none")
+            plt.close(fig)
+            generated_files.append(str(p2))
 
         # 3. 2D Feature Space (Entropy vs Payload Size with Anomaly Boundary)
         fig, ax = plt.subplots(figsize=(10, 5), dpi=300)
