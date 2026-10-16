@@ -1,0 +1,120 @@
+================================================================================
+SHIELD TECHNOLOGY - EXPOSITION SUPERVISION PROMETHEUS & HEALTHCHECK (S9-S11)
+Rapport de Stage ESPRIT - Preuve d'Execution #05
+Horodatage : 2026-10-16T17:00:33.450294+00:00
+Composants : app/metrics.py, app/main.py (/metrics & /api/v1/health)
+================================================================================
+
+[POINT DE CONTROLE 1 : ETAT DE SANTE DU SERVICE (/api/v1/health)]
+--------------------------------------------------------------------------------
+> GET /api/v1/health HTTP/1.1
+< HTTP/1.1 200 OK
+< Content-Type: application/json
+
+{
+  "status": "healthy",
+  "service": "Shield Technology Telemetry Pipeline",
+  "version": "2.4.0",
+  "environment": "production",
+  "queue_depth": 0,
+  "dlq_depth": 0,
+  "worker_active": true,
+  "worker_processed_events": 10000,
+  "timestamp": "2026-10-16T17:00:33.449274+00:00"
+}
+
+
+[POINT DE CONTROLE 2 : SCRAPING METRIQUES PROMETHEUS (/metrics)]
+--------------------------------------------------------------------------------
+> GET /metrics HTTP/1.1
+< HTTP/1.1 200 OK
+< Content-Type: text/plain; version=0.0.4; charset=utf-8
+
+# HELP python_gc_objects_collected_total Objects collected during gc
+# TYPE python_gc_objects_collected_total counter
+python_gc_objects_collected_total{generation="0"} 234532.0
+python_gc_objects_collected_total{generation="1"} 67237.0
+python_gc_objects_collected_total{generation="2"} 6618.0
+# HELP python_gc_objects_uncollectable_total Uncollectable objects found during GC
+# TYPE python_gc_objects_uncollectable_total counter
+python_gc_objects_uncollectable_total{generation="0"} 0.0
+python_gc_objects_uncollectable_total{generation="1"} 0.0
+python_gc_objects_uncollectable_total{generation="2"} 0.0
+# HELP python_gc_collections_total Number of times this generation was collected
+# TYPE python_gc_collections_total counter
+python_gc_collections_total{generation="0"} 1454.0
+python_gc_collections_total{generation="1"} 132.0
+python_gc_collections_total{generation="2"} 6.0
+# HELP python_info Python platform information
+# TYPE python_info gauge
+python_info{implementation="CPython",major="3",minor="10",patchlevel="11",version="3.10.11"} 1.0
+# HELP telemetry_events_ingested_total Total security telemetry events ingested by the platform
+# TYPE telemetry_events_ingested_total counter
+telemetry_events_ingested_total{event_type="DDOS_FLOOD",severity="CRITICAL"} 1660.0
+telemetry_events_ingested_total{event_type="SSH_BRUTE_FORCE",severity="HIGH"} 1.0
+telemetry_events_ingested_total{event_type="SYSTEM_HEARTBEAT",severity="LOW"} 1620.0
+telemetry_events_ingested_total{event_type="SQL_INJECTION_ATTEMPT",severity="CRITICAL"} 1697.0
+telemetry_events_ingested_total{event_type="PORT_SCAN",severity="MEDIUM"} 1641.0
+telemetry_events_ingested_total{event_type="AUTH_ATTEMPT",severity="HIGH"} 1753.0
+telemetry_events_ingested_total{event_type="MALWARE_DETECTED",severity="CRITICAL"} 1630.0
+# HELP telemetry_events_ingested_created Total security telemetry events ingested by the platform
+# TYPE telemetry_events_ingested_created gauge
+telemetry_events_ingested_created{event_type="DDOS_FLOOD",severity="CRITICAL"} 1.792169963047935e+09
+telemetry_events_ingested_created{event_type="SSH_BRUTE_FORCE",severity="HIGH"} 1.792169963047935e+09
+telemetry_events_ingested_created{event_type="SYSTEM_HEARTBEAT",severity="LOW"} 1.792169963274302e+09
+telemetry_events_ingested_created{event_type="SQL_INJECTION_ATTEMPT",severity="CRITICAL"} 1.792169963274302e+09
+telemetry_events_ingested_created{event_type="PORT_SCAN",severity="MEDIUM"} 1.792169963274302e+09
+telemetry_events_ingested_created{event_type="AUTH_ATTEMPT",severity="HIGH"} 1.792169963274302e+09
+telemetry_events_ingested_created{event_type="MALWARE_DETECTED",severity="CRITICAL"} 1.792169963274302e+09
+# HELP telemetry_ingest_latency_seconds Latency of the HTTP ingestion endpoint
+# TYPE telemetry_ingest_latency_seconds histogram
+telemetry_ingest_latency_seconds_bucket{le="0.001"} 1.0
+telemetry_ingest_latency_seconds_bucket{le="0.005"} 50.0
+telemetry_ingest_latency_seconds_bucket{le="0.01"} 50.0
+telemetry_ingest_latency_seconds_bucket{le="0.025"} 50.0
+telemetry_ingest_latency_seconds_bucket{le="0.05"} 50.0
+telemetry_ingest_latency_seconds_bucket{le="0.1"} 50.0
+telemetry_ingest_latency_seconds_bucket{le="0.25"} 51.0
+telemetry_ingest_latency_seconds_bucket{le="0.5"} 51.0
+telemetry_ingest_latency_seconds_bucket{le="1.0"} 51.0
+telemetry_ingest_latency_seconds_bucket{le="+Inf"} 51.0
+telemetry_ingest_latency_seconds_count 51.0
+telemetry_ingest_latency_seconds_sum 0.17272319995390717
+# HELP telemetry_ingest_latency_seconds_created Latency of the HTTP ingestion endpoint
+# TYPE telemetry_ingest_latency_seconds_created gauge
+telemetry_ingest_latency_seconds_created 1.7921699565915463e+09
+# HELP telemetry_db_bulk_insert_duration_seconds Time taken to execute database bulk upsert transactions
+# TYPE telemetry_db_bulk_insert_duration_seconds histogram
+telemetry_db_bulk_insert_duration_seconds_bucket{le="0.005"} 0.0
+telemetry_db_bulk_insert_duration_seconds_bucket{le="0.01"} 1.0
+telemetry_db_bulk_insert_duration_seconds_bucket{le="0.025"} 1.0
+telemetry_db_bulk_insert_duration_seconds_bucket{le="0.05"} 99.0
+telemetry_db_bulk_insert_duration_seconds_bucket{le="0.1"} 102.0
+telemetry_db_bulk_insert_duration_seconds_bucket{le="0.25"} 102.0
+telemetry_db_bulk_insert_duration_seconds_bucket{le="0.5"} 102.0
+telemetry_db_bulk_insert_duration_seconds_bucket{le="1.0"} 102.0
+telemetry_db_bulk_insert_duration_seconds_bucket{le="2.0"} 102.0
+telemetry_db_bulk_insert_duration_seconds_bucket{le="+Inf"} 102.0
+telemetry_db_bulk_insert_duration_seconds_count 102.0
+telemetry_db_bulk_insert_duration_seconds_sum 3.404416599965305
+# HELP telemetry_db_bulk_insert_duration_seconds_created Time taken to execute database bulk upsert transactions
+# TYPE telemetry_db_bulk_insert_duration_seconds_created gauge
+telemetry_db_bulk_insert_duration_seconds_created 1.7921699565915463e+09
+# HELP telemetry_queue_depth Current number of pending events waiting in the broker queue
+# TYPE telemetry_queue_depth gauge
+telemetry_queue_depth{queue_name="telemetry.raw"} 0.0
+# HELP telemetry_dlq_events_total Count of malformed or poison events routed to the Dead Letter Queue
+# TYPE telemetry_dlq_events_total counter
+# HELP telemetry_rate_limit_exceeded_total Count of 429 Too Many Requests rejections due to rate limiting
+# TYPE telemetry_rate_limit_exceeded_total counter
+telemetry_rate_limit_exceeded_total 0.0
+# HELP telemetry_rate_limit_exceeded_created Count of 429 Too Many Requests rejections due to rate limiting
+# TYPE telemetry_rate_limit_exceeded_created gauge
+telemetry_rate_limit_exceeded_created 1.7921699565915463e+09
+
+
+--> EXPLICATION DES METRIQUES CLEFS POUR LE SOC :
+    - 'telemetry_events_ingested_total' : Compteur partitionne par severite et type d'attaque.
+    - 'telemetry_ingest_latency_seconds': Histogramme mesurant le temps d'acceptation HTTP.
+    - 'telemetry_queue_depth'           : Gauge observant la charge instantanee du broker.
+================================================================================

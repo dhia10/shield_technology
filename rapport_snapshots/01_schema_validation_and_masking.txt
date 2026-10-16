@@ -1,0 +1,88 @@
+================================================================================
+SHIELD TECHNOLOGY - VERIFICATION DE SANITISATION & VALIDATION DE SCHEMA (S1-S3)
+Rapport de Stage ESPRIT - Preuve d'Execution #01
+Horodatage : 2026-10-16T16:59:18.909394+00:00
+Composants : app/schemas.py (Pydantic v2), app/parser.py (Regex Redactor & IP Enricher)
+================================================================================
+
+[ETAPE 1 : LOG BRUT RECU DE LA SONDE (CONTIENT DES DONNEES CRITIQUES EN CLAIR)]
+--------------------------------------------------------------------------------
+{
+  "timestamp": "2026-06-18T14:32:01.120Z",
+  "agent_id": "probe-sousse-gateway-01",
+  "severity": "CRITICAL",
+  "event_type": "SQL_INJECTION_ATTEMPT",
+  "source_ip": "197.14.88.22",
+  "destination_ip": "10.0.4.15",
+  "payload": {
+    "attack_vector": "HTTP_POST /api/v1/auth/login",
+    "username": "admin' OR '1'='1' --",
+    "password": "ClearTextMasterPassword2026!",
+    "api_key": "sec_live_99fba82c1840182",
+    "access_token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.t-IDNbu3rqL0xWNWymPNph6JwUKoWjyAfFD0Mgcvda0",
+    "user_agent": "sqlmap/1.7.2#stable",
+    "nested_context": {
+      "secret_env_var": "SUPER_SECRET_PROD_DATABASE_KEY",
+      "request_id": "req-98402-tunis"
+    }
+  }
+}
+
+[ETAPE 2 : LOG NORMALISE, ENRICHI ET MASQUE APRES PASSAGE DANS LE PARSER]
+--------------------------------------------------------------------------------
+Empreinte Déterministe SHA-256 (Dédoublonnage) : e5ae80d940870843362a2d38310aac20bbb59bd42839c9f52f282d1b0eb9dce0
+Classification IP Réseau                       : EXTERNAL_WAN
+Pays Géolocalisé (Souveraineté)                : TN
+Is Private / Internal Defense                  : False
+
+Données Nettoyées (Sanitized Payload) :
+{
+  "attack_vector": "HTTP_POST /api/v1/auth/login",
+  "username": "admin' OR '1'='1' --",
+  "password": "***REDACTED***",
+  "api_key": "***REDACTED***",
+  "access_token": "***REDACTED***",
+  "user_agent": "sqlmap/1.7.2#stable",
+  "nested_context": {
+    "secret_env_var": "***REDACTED***",
+    "request_id": "req-98402-tunis"
+  }
+}
+
+--> CONSTAT DE SECURITE :
+    - Le champ 'password' est masque par : '***REDACTED***'
+    - Le champ 'api_key' est masque par  : '***REDACTED***'
+    - Le champ 'access_token' est masque : '***REDACTED***'
+    - La cle imbriquee 'secret_env_var'  : '***REDACTED***'
+    - La cle contextuelle 'request_id'   : 'req-98402-tunis' (conservee)
+
+[ETAPE 3 : DETECTION ET REJET D'UNE TRAME CORROMPUE (MALFORMED POISON LOG)]
+--------------------------------------------------------------------------------
+Trame illicite reçue :
+{
+  "timestamp": "INVALID_TIMESTAMP_FORMAT",
+  "agent_id": "",
+  "severity": "UNDEFINED_SEVERITY",
+  "event_type": "UNKNOWN_ATTACK",
+  "source_ip": "not_an_ip"
+}
+
+Trace d'Interception & Rejet Pydantic v2 :
+4 validation errors for RawTelemetryEvent
+timestamp
+  Input should be a valid datetime or date, invalid character in year [type=datetime_from_date_parsing, input_value='INVALID_TIMESTAMP_FORMAT', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/datetime_from_date_parsing
+agent_id
+  String should have at least 3 characters [type=string_too_short, input_value='', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/string_too_short
+severity
+  Input should be 'LOW', 'MEDIUM', 'HIGH' or 'CRITICAL' [type=enum, input_value='UNDEFINED_SEVERITY', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/enum
+event_type
+  Input should be 'AUTH_ATTEMPT', 'SSH_BRUTE_FORCE', 'PORT_SCAN', 'MALWARE_DETECTED', 'DDOS_FLOOD', 'SYSTEM_HEARTBEAT', 'FIREWALL_DROP' or 'SQL_INJECTION_ATTEMPT' [type=enum, input_value='UNKNOWN_ATTACK', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.11/v/enum
+
+--> ACTION PIPELINE :
+    - Log invalide capture immediatement avant acces a la base de donnees.
+    - Routage automatique vers la Dead Letter Queue (DLQ) pour investigation forensique.
+================================================================================

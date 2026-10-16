@@ -1,32 +1,160 @@
+version: "3.8"
+
 services:
-  shield-api:
+  # ─── 1. POSTGRESQL 16 (Timescale / Composite Indexed Storage) ──────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: shield_postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: shield
+      POSTGRES_PASSWORD: shield_secret
+      POSTGRES_DB: shield_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shield -d shield_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    networks:
+      - shield_network
+
+  # ─── 2. REDIS 7 (Cache & Rate Limiting) ────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: shield_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - shield_network
+
+  # ─── 3. RABBITMQ 3.12 (Message Broker & Dead Letter Exchange) ──────────────
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: shield_rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"     # AMQP Protocol
+      - "15672:15672"   # Management Web Dashboard
+    environment:
+      RABBITMQ_DEFAULT_USER: shield
+      RABBITMQ_DEFAULT_PASS: shield_secret
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 15s
+    networks:
+      - shield_network
+
+  # ─── 4. TELEMETRY & INTELLIGENCE API (FastAPI) ─────────────────────────────
+  api:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: shield_data_ai_platform
+    container_name: shield_api
     restart: unless-stopped
     ports:
       - "8000:8000"
     environment:
-      - APP_NAME=Shield Technology Data & AI Platform
       - ENVIRONMENT=production
       - HOST=0.0.0.0
       - PORT=8000
-      - TELEMETRY_BUFFER_CAPACITY=1000
-      - TELEMETRY_BATCH_FLUSH_SIZE=50
-      - TELEMETRY_FLUSH_INTERVAL_SECONDS=5.0
-      - MOCK_WEBHOOKS=true
-      - N8N_DISPATCH_WEBHOOK_URL=${N8N_DISPATCH_WEBHOOK_URL:-}
-      - WEBHOOK_SIGNING_SECRET=${WEBHOOK_SIGNING_SECRET:-}
+      - DATABASE_URL=postgresql+asyncpg://shield:shield_secret@postgres:5432/shield_db
+      - REDIS_URL=redis://redis:6379/0
+      - RABBITMQ_URL=amqp://shield:shield_secret@rabbitmq:5672/
+      - SHIELD_API_KEY=shield_sec_key_2026_esprit
+      - SHIELD_HMAC_SECRET=shield_hmac_secret_master_key_99
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     volumes:
+      - shield_archives:/app/archives
       - shield_data:/app/data
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')"]
       interval: 15s
       timeout: 5s
       retries: 3
       start_period: 5s
+    networks:
+      - shield_network
+
+  # ─── 5. ASYNC WORKER (Consumer & DLQ Router) ──────────────────────────────
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shield_worker
+    restart: unless-stopped
+    command: ["python", "-m", "app.worker"]
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=postgresql+asyncpg://shield:shield_secret@postgres:5432/shield_db
+      - REDIS_URL=redis://redis:6379/0
+      - RABBITMQ_URL=amqp://shield:shield_secret@rabbitmq:5672/
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    volumes:
+      - shield_archives:/app/archives
+      - shield_data:/app/data
+    networks:
+      - shield_network
+
+  # ─── 6. PROMETHEUS (Metrics Aggregator) ───────────────────────────────────
+  prometheus:
+    image: prom/prometheus:v2.49.1
+    container_name: shield_prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./deploy/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - shield_network
+
+networks:
+  shield_network:
+    driver: bridge
 
 volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+  prometheus_data:
+  shield_archives:
   shield_data:
-    driver: local

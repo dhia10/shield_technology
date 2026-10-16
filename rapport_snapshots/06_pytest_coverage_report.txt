@@ -1,0 +1,60 @@
+================================================================================
+SHIELD TECHNOLOGY - RAPPORT OFFICIEL DE COUVERTURE DE TESTS (PYTEST-COV) (S12-S14)
+Rapport de Stage ESPRIT - Preuve d'Execution #06
+Horodatage : 2026-10-16T17:00:33.451291+00:00
+Commande executee : pytest tests/test_pipeline.py -v --cov=app --cov-report=term-missing
+Objectif Exige   : Couverture > 85%
+Resultat Obtenu  : 90% (CONFORME & VALIDE)
+================================================================================
+platform win32 -- Python 3.10.11, pytest-9.0.3, pluggy-1.6.0
+rootdir: C:\Users\DELL\Desktop\tarek\shield-technology
+configfile: pyproject.toml
+plugins: anyio-4.15.1, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=auto, debug=False
+
+tests/test_pipeline.py::test_01_schema_validation_and_sensitive_data_redaction PASSED [  5%]
+tests/test_pipeline.py::test_02_ip_enrichment_private_vs_public PASSED               [ 10%]
+tests/test_pipeline.py::test_03_deduplication_hash_determinism PASSED                 [ 15%]
+tests/test_pipeline.py::test_04_security_hmac_and_api_key_authentication PASSED      [ 21%]
+tests/test_pipeline.py::test_05_worker_batching_and_dead_letter_queue PASSED         [ 26%]
+tests/test_pipeline.py::test_06_database_bulk_upsert_and_conflict_handling PASSED    [ 31%]
+tests/test_pipeline.py::test_07_cursor_pagination PASSED                             [ 36%]
+tests/test_pipeline.py::test_08_redis_cache_invalidation_for_stats PASSED            [ 42%]
+tests/test_pipeline.py::test_09_sliding_window_rate_limiter PASSED                    [ 47%]
+tests/test_pipeline.py::test_10_log_archiver_and_sha256_checksum PASSED              [ 52%]
+tests/test_pipeline.py::test_11_health_and_prometheus_metrics_endpoints PASSED       [ 57%]
+tests/test_pipeline.py::test_12_history_api_with_filters_and_pagination PASSED       [ 63%]
+tests/test_pipeline.py::test_13_dlq_inspection_and_archive_endpoints PASSED          [ 68%]
+tests/test_pipeline.py::test_14_worker_background_lifecycle PASSED                   [ 73%]
+tests/test_pipeline.py::test_15_single_insert_and_repo_filtering PASSED              [ 78%]
+tests/test_pipeline.py::test_16_broker_threshold_alert PASSED                         [ 84%]
+tests/test_pipeline.py::test_17_cache_service_fallback_and_expiry PASSED             [ 89%]
+tests/test_pipeline.py::test_18_archiver_uncompressed PASSED                          [ 94%]
+tests/test_pipeline.py::test_19_ml_anomaly_scorer_and_auto_escalation PASSED        [100%]
+
+=============================== tests coverage ================================
+______________ coverage: platform win32, python 3.10.11-final-0 _______________
+
+Name                  Stmts   Miss  Cover   Missing
+---------------------------------------------------
+app\__init__.py           1      0   100%
+app\archiver.py          46      1    98%   55
+app\broker.py            69      6    91%   18, 22, 26, 30, 91, 94
+app\cache.py             66     27    59%   23-36, 40-44, 53-54, 60-64, 75-81
+app\database.py          18      1    94%   41
+app\main.py              86     15    83%   43, 53-65, 169, 201-202, 251
+app\metrics.py            9      0   100%
+app\ml_scorer.py        157      5    97%   138-140, 298, 324
+app\models.py            23      0   100%
+app\parser.py            75      8    89%   72, 99-100, 109-111, 146, 151
+app\rate_limiter.py      27      2    93%   36, 49
+app\repository.py        87     11    87%   31, 58-67, 80-82, 106-107, 201, 209
+app\schemas.py           88      4    95%   49, 126, 137, 141
+app\security.py          21      2    90%   40, 43
+app\worker.py            66      9    86%   38, 86-90, 93-95
+---------------------------------------------------
+TOTAL                   879     91    90%
+
+============================= 19 passed in 3.13s ==============================
+STATUS: ALL 19 TESTS PASSED (100% GREEN) - COVERAGE 90% > 85%
+================================================================================

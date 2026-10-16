@@ -1,4 +1,4 @@
-﻿# ==============================================================================
+# ==============================================================================
 # Shield Technology Strict Security .gitignore
 # Zero-Secret Architecture & Public Repository Sanitization Rules
 # ==============================================================================
@@ -13,6 +13,8 @@
 *.pfx
 
 # Python Artifacts & Bytecode
+.venv/
+venv/
 __pycache__/
 *.py[cod]
 *$py.class

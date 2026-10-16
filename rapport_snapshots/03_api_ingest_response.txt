@@ -1,0 +1,132 @@
+================================================================================
+SHIELD TECHNOLOGY - SPECIFICATION ET TRACE D'ECHANGE API REST (S5-S7)
+Rapport de Stage ESPRIT - Preuve d'Execution #03
+Horodatage : 2026-10-16T16:59:23.236842+00:00
+Composants : app/main.py, app/security.py (HMAC-SHA256), app/repository.py (Cursor Pagination)
+================================================================================
+
+[ECHANGE 1 : INGESTION D'EVENEMENTS DE SECURITE (POST /api/v1/telemetry/ingest)]
+--------------------------------------------------------------------------------
+> POST /api/v1/telemetry/ingest HTTP/1.1
+> Host: api.shieldtechnology.tn
+> Content-Type: application/json
+> X-API-Key: shield_pro...[REDACTED]
+> X-HMAC-Signature: 93177efc1beff406a594fea9fd91de3e75c8630ef0783de42abebb12177b33c3
+
+Corps de Requête Envoyé :
+{
+  "events": [
+    {
+      "timestamp": "2026-10-16T16:59:23.046919+00:00",
+      "agent_id": "probe-tunis-central-01",
+      "severity": "CRITICAL",
+      "event_type": "DDOS_FLOOD",
+      "source_ip": "185.220.101.4",
+      "destination_ip": "10.0.0.1",
+      "payload": {
+        "syn_rate_pps": 95000,
+        "attack_type": "TCP SYN Flood",
+        "password": "ProbeShouldNeverSendThis_Secret123"
+      }
+    },
+    {
+      "timestamp": "2026-10-16T16:59:23.046919+00:00",
+      "agent_id": "probe-tunis-central-01",
+      "severity": "HIGH",
+      "event_type": "SSH_BRUTE_FORCE",
+      "source_ip": "197.14.88.99",
+      "destination_ip": "10.0.0.22",
+      "payload": {
+        "attempted_user": "root",
+        "failed_attempts": 42
+      }
+    }
+  ]
+}
+
+< HTTP/1.1 202 Accepted
+< Content-Type: application/json
+Corps de Réponse Recu :
+{
+  "status": "accepted",
+  "accepted_count": 2,
+  "queue_name": "telemetry.raw",
+  "dropped_count": 0,
+  "ingest_latency_ms": 0.102,
+  "timestamp": "2026-10-16T16:59:23.047935Z"
+}
+
+--> ANALYSE :
+    - Statut 202 Accepted retourne immediatement sans bloquer la sonde.
+    - Temps de traitement API : 0.102 ms (inférieur au SLA de 2 ms).
+    - Evenements pushes directement dans la file asynchrone 'telemetry.raw'.
+
+
+[ECHANGE 2 : CONSULTATION DE L'HISTORIQUE PAR CURSEUR (GET /api/v1/telemetry/history)]
+--------------------------------------------------------------------------------
+> GET /api/v1/telemetry/history?limit=2&severity=CRITICAL HTTP/1.1
+> Host: api.shieldtechnology.tn
+> Accept: application/json
+
+< HTTP/1.1 200 OK
+< Content-Type: application/json
+Corps de Réponse Recu :
+{
+  "items": [
+    {
+      "id": "633d86e0-1295-494d-b630-45781e3072a7",
+      "event_hash": "d2712df39bc2cfdfa7bc406b9764216dcb6785e22ba2a1d48dd6753f3e687d4d",
+      "timestamp": "2026-10-16T16:59:23.046919",
+      "agent_id": "probe-tunis-central-01",
+      "severity": "CRITICAL",
+      "event_type": "DDOS_FLOOD",
+      "source_ip": "185.220.101.4",
+      "destination_ip": "10.0.0.1",
+      "sanitized_payload": {
+        "syn_rate_pps": 95000,
+        "attack_type": "TCP SYN Flood",
+        "password": "***REDACTED***"
+      },
+      "enrichment": {
+        "is_private": false,
+        "is_loopback": false,
+        "network_class": "EXTERNAL_WAN",
+        "geo_country": "EU",
+        "ml_anomaly_score": 0.9301,
+        "ml_prediction": "ANOMALOUS_ATTACK"
+      },
+      "created_at": "2026-10-16T16:59:23.177818"
+    },
+    {
+      "id": "df8240ee-de21-476f-a2bd-45df2af099c1",
+      "event_hash": "25b9d340fac8cc6f1009601d382cbb47de65976e4b802f37904562c9293cd934",
+      "timestamp": "2026-10-16T16:56:20.339619",
+      "agent_id": "probe-sfax-edge-03",
+      "severity": "CRITICAL",
+      "event_type": "SQL_INJECTION_ATTEMPT",
+      "source_ip": "104.244.72.115",
+      "destination_ip": "10.0.0.5",
+      "sanitized_payload": {
+        "query": "UNION SELECT username, password, token FROM admin_credentials",
+        "source": "sqlmap/1.8"
+      },
+      "enrichment": {
+        "is_private": false,
+        "is_loopback": false,
+        "network_class": "EXTERNAL_WAN",
+        "geo_country": "GLOBAL",
+        "ml_anomaly_score": 0.9062,
+        "ml_prediction": "ANOMALOUS_ATTACK"
+      },
+      "created_at": "2026-10-16T16:56:38.640319"
+    }
+  ],
+  "next_cursor": "MjAyNi0xMC0xNlQxNjo1NjoyMC4zMzk2MTl8ZGY4MjQwZWUtZGUyMS00NzZmLWEyYmQtNDVkZjJhZjA5OWMx",
+  "has_more": true,
+  "total_returned": 2
+}
+
+--> ANALYSE TECHNIQUE DU CURSEUR (O(1)) :
+    - 'next_cursor' token opaque Base64 : "MjAyNi0xMC0xNlQxNjo1NjoyMC4zMzk2MTl8ZGY4MjQwZWUtZGUyMS00NzZmLWEyYmQtNDVkZjJhZjA5OWMx"
+    - Permet la navigation sans degradation O(N) de performance sur des millions de logs.
+================================================================================
