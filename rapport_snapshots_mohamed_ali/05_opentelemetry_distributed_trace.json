@@ -1,0 +1,105 @@
+{
+  "trace_id": "3d9ca6336ee349b4b0d4ae18e35584f0",
+  "root_service": "shield-distributed-platform",
+  "total_spans": 5,
+  "total_latency_ms": 72.563,
+  "w3c_traceparent": "00-3d9ca6336ee349b4b0d4ae18e35584f0-9b8b4164825c56a4-01",
+  "spans": [
+    {
+      "name": "grpc_gateway_ingest",
+      "trace_id": "3d9ca6336ee349b4b0d4ae18e35584f0",
+      "span_id": "9b8b4164825c56a4",
+      "parent_span_id": null,
+      "duration_ms": 11.519,
+      "tags": {
+        "service.name": "shield-distributed-platform",
+        "protocol": "gRPC/HTTP2",
+        "agent.id": "probe-tunis-01"
+      },
+      "logs": [
+        {
+          "timestamp": "2026-10-16T19:58:36.580650+00:00",
+          "message": "Decoded binary protobuf payload",
+          "data": {
+            "bytes": 342
+          }
+        }
+      ]
+    },
+    {
+      "name": "ring_buffer_enqueue",
+      "trace_id": "3d9ca6336ee349b4b0d4ae18e35584f0",
+      "span_id": "73c4a67c25cd36ed",
+      "parent_span_id": "9b8b4164825c56a4",
+      "duration_ms": 14.909,
+      "tags": {
+        "service.name": "shield-distributed-platform",
+        "buffer.utilization": "24.5%"
+      },
+      "logs": [
+        {
+          "timestamp": "2026-10-16T19:58:36.595554+00:00",
+          "message": "Enqueued into circular buffer",
+          "data": {}
+        }
+      ]
+    },
+    {
+      "name": "stream_rules_evaluation",
+      "trace_id": "3d9ca6336ee349b4b0d4ae18e35584f0",
+      "span_id": "44b4a218b6245c3b",
+      "parent_span_id": "73c4a67c25cd36ed",
+      "duration_ms": 15.902,
+      "tags": {
+        "service.name": "shield-distributed-platform",
+        "rules.evaluated": 3
+      },
+      "logs": [
+        {
+          "timestamp": "2026-10-16T19:58:36.611121+00:00",
+          "message": "Pattern matched: DDOS_SYN_FLOOD",
+          "data": {
+            "severity": "CRITICAL"
+          }
+        }
+      ]
+    },
+    {
+      "name": "postgres_bulk_upsert",
+      "trace_id": "3d9ca6336ee349b4b0d4ae18e35584f0",
+      "span_id": "d82ac7350b6474ec",
+      "parent_span_id": "44b4a218b6245c3b",
+      "duration_ms": 14.999,
+      "tags": {
+        "service.name": "shield-distributed-platform",
+        "db.table": "telemetry_events",
+        "batch.size": 100
+      },
+      "logs": [
+        {
+          "timestamp": "2026-10-16T19:58:36.626537+00:00",
+          "message": "Committed transaction with ON CONFLICT DO UPDATE",
+          "data": {}
+        }
+      ]
+    },
+    {
+      "name": "websocket_soc_dispatch",
+      "trace_id": "3d9ca6336ee349b4b0d4ae18e35584f0",
+      "span_id": "fb865caa5ca6bf2c",
+      "parent_span_id": "44b4a218b6245c3b",
+      "duration_ms": 15.234,
+      "tags": {
+        "service.name": "shield-distributed-platform",
+        "clients.notified": 8
+      },
+      "logs": [
+        {
+          "timestamp": "2026-10-16T19:58:36.641879+00:00",
+          "message": "Dispatched alert payload to connected SOC rooms",
+          "data": {}
+        }
+      ]
+    }
+  ]
+}

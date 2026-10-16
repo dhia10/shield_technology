@@ -1,0 +1,147 @@
+================================================================================
+SHIELD TECHNOLOGY — ARCHITECTURE DISTRIBUÉE & SPÉCIFICATION PROTOBUF (M1-M2)
+Rapport de Stage ESPRIT — Preuve d'Exécution #01
+Candidat   : Mohamed Ali ROMDHANE (Génie Logiciel / Backend & Architecture de Données)
+Horodatage : 2026-10-16T19:58:35.642265+00:00
+Composants : app/proto/telemetry.proto, app/protocols/schema_registry.py
+================================================================================
+
+1. DÉCOUPAGE EN DOMAINES (DOMAIN-DRIVEN DESIGN - DDD)
+--------------------------------------------------------------------------------
+L'infrastructure backend de Shield Technology est structurée en 4 contextes délimités (Bounded Contexts) :
+
++-------------------------------------------------------------------------------+
+|                      SHIELD DISTRIBUTED TELEMETRY DOMAIN                      |
++-------------------------------------------------------------------------------+
+| 1. INGESTION EDGE CONTEXT        | 2. STREAM PROCESSING & CORRELATION        |
+|    - gRPC Bi-directional Stream  |    - Tumbling & Sliding Window Analytics  |
+|    - MQTT IoT / Edge Broker      |    - Real-Time Pattern Signature Engine   |
+|    - Wire Binary Deserialization |    - Autonomous Threat Escalation (< 2ms) |
+|    - Ring Buffer Backpressure    |    - OpenTelemetry Distributed Context    |
++----------------------------------+--------------------------------------------+
+| 3. PERSISTENCE & STORAGE CONTEXT | 4. ALERTING & DISPATCH CONTEXT             |
+|    - PostgreSQL 16 Bulk Upsert   |    - Real-Time WebSocket Channel Manager   |
+|    - Redis 7 Real-Time Cache     |    - Tenant Isolation & RBAC Filtering     |
+|    - Immutable Event Store Ledger|    - SOC Analyst Console Streams           |
+|    - Gzip SHA-256 Cold Archive   |    - Emergency Incident Webhooks           |
++-------------------------------------------------------------------------------+
+
+2. CONTRAT D'INTERFACE PROTOCOL BUFFERS (telemetry.proto)
+--------------------------------------------------------------------------------
+syntax = "proto3";
+
+package shield.telemetry.v1;
+
+option go_package = "shield/telemetry/v1;telemetryv1";
+option java_multiple_files = true;
+option java_package = "com.shield.telemetry.v1";
+
+// ─── ENUMS ───────────────────────────────────────────────────────────────────
+
+enum SeverityProto {
+  SEVERITY_UNKNOWN = 0;
+  SEVERITY_LOW = 1;
+  SEVERITY_MEDIUM = 2;
+  SEVERITY_HIGH = 3;
+  SEVERITY_CRITICAL = 4;
+}
+
+enum EventTypeProto {
+  EVENT_UNKNOWN = 0;
+  EVENT_PORT_SCAN = 1;
+  EVENT_SSH_BRUTE_FORCE = 2;
+  EVENT_SQL_INJECTION = 3;
+  EVENT_DDOS_FLOOD = 4;
+  EVENT_MALWARE_OUTBOUND = 5;
+  EVENT_AUTH_ATTEMPT = 6;
+}
+
+// ─── MESSAGES ────────────────────────────────────────────────────────────────
+
+message TelemetryEventProto {
+  string event_id = 1;
+  int64 timestamp_unix_ms = 2;
+  string agent_id = 3;
+  string tenant_id = 4;
+  SeverityProto severity = 5;
+  EventTypeProto event_type = 6;
+  string source_ip = 7;
+  string destination_ip = 8;
+  bytes payload_bytes = 9;
+  string event_hash = 10;
+  string schema_version = 11;
+  map<string, string> metadata = 12;
+}
+
+message TelemetryBatchRequest {
+  repeated TelemetryEventProto events = 1;
+  string api_key = 2;
+  bytes hmac_signature = 3;
+  int64 client_timestamp_ms = 4;
+}
+
+message TelemetryBatchResponse {
+  string status = 1;
+  int32 accepted_count = 2;
+  int32 rejected_count = 3;
+  double processing_latency_ms = 4;
+  string queue_name = 5;
+  string trace_id = 6;
+}
+
+message AlertSubscriptionRequest {
+  string tenant_id = 1;
+  SeverityProto min_severity = 2;
+  repeated EventTypeProto subscribed_event_types = 3;
+}
+
+message SecurityAlertProto {
+  string alert_id = 1;
+  int64 timestamp_unix_ms = 2;
+  string tenant_id = 3;
+  string rule_name = 4;
+  SeverityProto severity = 5;
+  string description = 6;
+  TelemetryEventProto triggered_event = 7;
+  double correlation_score = 8;
+}
+
+// ─── SERVICES ────────────────────────────────────────────────────────────────
+
+service TelemetryIngestService {
+  // Unary call for single event ingestion
+  rpc IngestEvent (TelemetryEventProto) returns (TelemetryBatchResponse);
+
+  // Unary call for batch event ingestion
+  rpc IngestBatch (TelemetryBatchRequest) returns (TelemetryBatchResponse);
+
+  // Client-side streaming for high-frequency telemetry burst
+  rpc StreamTelemetry (stream TelemetryEventProto) returns (TelemetryBatchResponse);
+
+  // Server-side streaming for real-time SOC alert feeds
+  rpc SubscribeAlerts (AlertSubscriptionRequest) returns (stream SecurityAlertProto);
+}
+
+
+3. REGISTRE DES SCHÉMAS (SCHEMA REGISTRY) & ÉVOLUTION DES VERSIONS
+--------------------------------------------------------------------------------
+Mode de compatibilité par défaut : FULL (Rétrocompatibilité et compatibilité amont)
+Catalogue des schémas enregistrés :
+{
+  "telemetry.raw": {
+    "v1.0": {
+      "fingerprint": "7e8dc6b0a0f57181",
+      "required_count": 6,
+      "total_fields": 6
+    },
+    "v1.1": {
+      "fingerprint": "b5ddbd6b893071db",
+      "required_count": 6,
+      "total_fields": 10
+    }
+  }
+}
+
+Conclusion : La spécification Protobuf et le Schema Registry garantissent l'absence
+totale de ruptures de contrats entre sondes distribuées et microservices backend.
+================================================================================

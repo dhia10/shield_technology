@@ -1,0 +1,55 @@
+================================================================================
+SHIELD TECHNOLOGY — REGISTRE IMMUABLE EVENT SOURCING & AUDITABILITÉ (M1-M2)
+Rapport de Stage ESPRIT — Preuve d'Exécution #06
+Candidat   : Mohamed Ali ROMDHANE
+Horodatage : 2026-10-16T19:58:36.644906+00:00
+Composants : app/eventsourcing/event_store.py (Chaînage cryptographique SHA-256)
+================================================================================
+
+1. TRAÇABILITÉ FORENSIQUE DE L'INCIDENT 'inc-2026-sousse-gw-994'
+--------------------------------------------------------------------------------
+  [Événement #0 | 2026-10-16T19:58:36.644287+00:00]
+    Type         : INCIDENT_DETECTED
+    Données      : {"source_ip": "185.220.101.4", "attack_type": "DDOS_SYN_FLOOD", "syn_rate_pps": 95000, "severity": "HIGH"}
+    Prev Hash    : 0000000000000000...
+    Current Hash : 2b9503b1f1e58494...
+  [Événement #1 | 2026-10-16T19:58:36.644287+00:00]
+    Type         : SEVERITY_ESCALATED
+    Données      : {"new_severity": "CRITICAL", "reason": "Traffic surge crossed SOC critical threshold (50k pps)", "triggered_by": "RulesEngine"}
+    Prev Hash    : 2b9503b1f1e58494...
+    Current Hash : d0c85b1541ef0e04...
+  [Événement #2 | 2026-10-16T19:58:36.644287+00:00]
+    Type         : IP_QUARANTINED
+    Données      : {"ip": "185.220.101.4", "action": "BGP_BLACKHOLE_ANNOUNCED", "duration_min": 120}
+    Prev Hash    : d0c85b1541ef0e04...
+    Current Hash : b7088ed1aabe6e1d...
+  [Événement #3 | 2026-10-16T19:58:36.644287+00:00]
+    Type         : INCIDENT_RESOLVED
+    Données      : {"resolution": "Attack traffic suppressed at edge boundary. Zero service degradation.", "resolved_by": "SOC_Automated_Orchestrator"}
+    Prev Hash    : b7088ed1aabe6e1d...
+    Current Hash : d1180eed445c34a4...
+
+2. CONTRÔLE D'INTÉGRITÉ DU GRAND LIVRE (TAMPER-EVIDENT VERIFICATION)
+--------------------------------------------------------------------------------
+Statut de la chaîne SHA-256 : VALIDE & INVIOLÉE (100% de concordance)
+Algorithme de hachage       : SHA-256(index | timestamp | id | type | data | prev_hash)
+Garantie de non-répudiation : Aucune modification rétroactive n'est possible sans
+                              invalider l'intégralité des empreintes subséquentes.
+
+3. RECONSTRUCTION DETERMINISTE DE L'ÉTAT PAR REJEU DES ÉVÉNEMENTS
+--------------------------------------------------------------------------------
+État projeté réhydraté :
+{
+  "aggregate_id": "inc-2026-sousse-gw-994",
+  "status": "RESOLVED",
+  "version": 4,
+  "severity": "CRITICAL",
+  "initial_attack": "DDOS_SYN_FLOOD",
+  "escalation_reason": "Traffic surge crossed SOC critical threshold (50k pps)",
+  "quarantined_ip": "185.220.101.4",
+  "resolution": "Attack traffic suppressed at edge boundary. Zero service degradation."
+}
+
+Conclusion : L'Event Sourcing offre à Shield Technology une piste d'audit opposable
+et une capacité de reconstitution rétrospective indispensable en cybersécurité.
+================================================================================

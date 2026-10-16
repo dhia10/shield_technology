@@ -172,6 +172,7 @@ class LogParser:
             event_hash=event_hash,
             timestamp=ts,
             agent_id=raw.agent_id,
+            tenant_id=getattr(raw, "tenant_id", "default_tenant") or "default_tenant",
             severity=raw.severity,
             event_type=raw.event_type,
             source_ip=raw.source_ip,

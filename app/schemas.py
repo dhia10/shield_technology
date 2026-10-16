@@ -34,6 +34,7 @@ class RawTelemetryEvent(BaseModel):
         description="Event creation timestamp (ISO 8601 UTC)"
     )
     agent_id: str = Field(..., min_length=3, max_length=64, description="Unique probe/agent identifier")
+    tenant_id: Optional[str] = Field(default="default_tenant", max_length=64, description="Tenant identifier for multi-tenant isolation")
     severity: SeverityEnum = Field(default=SeverityEnum.LOW, description="Alert severity level")
     event_type: EventTypeEnum = Field(..., description="Categorized security event type")
     source_ip: str = Field(..., min_length=7, max_length=45, description="Source IP address or hostname")
@@ -75,6 +76,7 @@ class SanitizedTelemetryEvent(BaseModel):
     event_hash: str = Field(..., description="Deterministic SHA-256 hash for deduplication")
     timestamp: datetime
     agent_id: str
+    tenant_id: Optional[str] = "default_tenant"
     severity: SeverityEnum
     event_type: EventTypeEnum
     source_ip: str
