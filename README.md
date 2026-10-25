@@ -73,7 +73,7 @@ flowchart TD
     WORKER --> ML
     WORKER --> PG
     WORKER -. Poison .-> DLQ
-    ML -. Threat > 0.80 .-> WORKER
+    ML -. "Threat > 0.80" .-> WORKER
     PG --> REDIS
     PG --> GZ
     Ingestion -. Metrics .-> PROM
@@ -250,17 +250,6 @@ app/api/routers/demo.py                  73      5    93%
 TOTAL                                  2344    234    90%
 ======================= 59 passed, 1 warning in 28.89s ========================
 ```
-
----
-
-## Academic Credentials & Internship Defense
-
-- **Internship Host**: Shield Technology (Tunis & Sousse, Tunisia)
-- **Company Director**: M. Tarek ROMDHANE
-- **Institution**: ESPRIT (École Supérieure Privée d'Ingénierie et de Technologies)
-- **Department**: Cycle Ingénieur en Informatique — Spécialité Data Science
-- **Student**: Dhia ROMDHANE
-- **Academic Year**: 2025 – 2026
 
 ---
 
