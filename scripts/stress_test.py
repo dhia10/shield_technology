@@ -6,11 +6,16 @@ Port Scans, and Malware Detections. Benchmarks throughput (events/sec) and p50/p
 
 import asyncio
 import json
+import os
 import random
 import statistics
+import sys
 import time
 from datetime import datetime, timezone
 from typing import Dict, Any, List
+
+# Ensure project root is in sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import httpx
 from app.main import app

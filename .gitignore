@@ -55,6 +55,10 @@ data/
 data/raw/*
 data/processed/*
 
+# Rapport artifacts
+rapport_snapshots/
+rapport_snapshots_mohamed_ali/
+
 # Log files & Debugging
 logs/
 *.log
