@@ -103,3 +103,45 @@ def test_api_demo_burst_benchmark(api_client):
     assert data["burst_size"] == 500
     assert "overall_throughput_eps" in data
     assert "p50_latency_ms" in data
+
+
+def test_api_demo_inspect_sanitization(api_client):
+    """Tests the /api/v1/demo/inspect-sanitization endpoint with arbitrary payload."""
+    payload = {
+        "agent_id": "probe-test-99",
+        "source_ip": "197.14.88.22",
+        "payload": {
+            "public_field": "hello",
+            "client_secret": "my_secret_token_123",
+            "password": "clear_password_abc",
+        },
+    }
+    res = api_client.post("/api/v1/demo/inspect-sanitization", json=payload)
+    assert res.status_code == status.HTTP_200_OK
+    data = res.json()
+    assert data["status"] == "success"
+    assert data["sanitized_payload"]["password"] == "***REDACTED***"
+    assert data["sanitized_payload"]["client_secret"] == "***REDACTED***"
+    assert data["sanitized_payload"]["public_field"] == "hello"
+    assert data["redacted_count"] == 2
+    assert "event_hash" in data
+    assert data["network_class"] == "EXTERNAL_WAN"
+
+
+def test_api_demo_analyze_bare_text(api_client):
+    """Tests bare string Shannon entropy and Isolation Forest scoring."""
+    payload = {
+        "raw_text": "powershell -enc JABzAD0ATgBlAHcALQBPAGIAagBlAGMAdAAgAE4AZQB0AA==",
+        "source_ip": "185.220.101.4",
+    }
+    res = api_client.post("/api/v1/demo/analyze-ml", json=payload)
+    assert res.status_code == status.HTTP_200_OK
+    data = res.json()
+    assert data["status"] == "success"
+    assert data["char_count"] > 0
+    assert data["unique_char_count"] > 0
+    assert "char_frequencies" in data
+    assert data["entropy_score"] > 3.0
+    assert "diagnostic" in data
+    assert "ALERTE" in data["diagnostic"] or "Score" in data["diagnostic"]
+
