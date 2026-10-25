@@ -37,11 +37,11 @@ jobs:
 
       - name: Static Type Checking (Mypy)
         run: |
-          mypy domain services api infrastructure --ignore-missing-imports
+          mypy app --ignore-missing-imports
 
       - name: Execute Pytest Suite with Coverage
         run: |
-          pytest tests/ -v --cov=domain --cov=services --cov=api --cov=infrastructure --cov-report=xml --cov-report=term-missing
+          pytest tests/ -v --cov=app --cov-report=xml --cov-report=term-missing
 
       - name: Verify Seed Script Integrity
         run: |

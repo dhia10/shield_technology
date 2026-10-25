@@ -1,9 +1,10 @@
 """
 Integration tests for Shield Technology FastAPI Endpoints.
-Verifies HTTP status codes, JSON response schemas, and error boundaries.
+Verifies HTTP status codes, JSON response schemas, HMAC security, and error boundaries.
 """
 
 from fastapi import status
+from app.security.auth import API_KEY, HMAC_SECRET, compute_hmac_signature
 
 
 def test_system_health_and_root(api_client):
@@ -12,76 +13,93 @@ def test_system_health_and_root(api_client):
     assert res_root.status_code == status.HTTP_200_OK
     assert res_root.json()["status"] == "operational"
 
-    res_health = api_client.get("/health")
+    res_health = api_client.get("/api/v1/health")
     assert res_health.status_code == status.HTTP_200_OK
-    assert res_health.json()["status"] == "healthy"
+    data = res_health.json()
+    assert data["status"] in ("healthy", "degraded")
+    assert "queue_depth" in data
 
 
-def test_api_telemetry_flow(api_client):
-    """Verifies telemetry event submission and metric query."""
+def test_api_telemetry_flow_unauthorized(api_client):
+    """Verifies that missing or invalid API Key returns HTTP 401."""
     event_payload = {
-        "event_type": "CTA_CLICK",
-        "session_id": "integration_session_99",
-        "page_path": "/produits",
-        "element_id": "cta_devis",
-        "metadata": {"source": "header_nav"},
+        "events": [
+            {
+                "agent_id": "probe-test-01",
+                "severity": "HIGH",
+                "event_type": "PORT_SCAN",
+                "source_ip": "197.14.88.22",
+                "destination_ip": "10.0.0.1",
+                "payload": {"target_port": 22},
+            }
+        ]
     }
-    res_ingest = api_client.post("/api/v1/telemetry/events", json=event_payload)
-    assert res_ingest.status_code == status.HTTP_202_ACCEPTED
-    assert res_ingest.json()["status"] == "accepted"
-    assert res_ingest.json()["count"] == 1
-
-    res_metrics = api_client.get("/api/v1/telemetry/metrics")
-    assert res_metrics.status_code == status.HTTP_200_OK
-    metrics = res_metrics.json()
-    assert metrics["total_events_received"] >= 1
+    res = api_client.post("/api/v1/telemetry/ingest", json=event_payload)
+    assert res.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-def test_api_semantic_search_flow(api_client):
-    """Verifies vector search endpoint with natural language query."""
-    search_payload = {
-        "query": "caméra 4k extérieure intelligence artificielle",
-        "top_k": 3,
-        "min_confidence": 0.1,
+def test_api_telemetry_flow_authorized(api_client):
+    """Verifies successful ingestion with valid X-API-Key and HMAC signature."""
+    import json
+    event_payload = {
+        "events": [
+            {
+                "agent_id": "probe-test-01",
+                "severity": "HIGH",
+                "event_type": "PORT_SCAN",
+                "source_ip": "197.14.88.22",
+                "destination_ip": "10.0.0.1",
+                "payload": {"target_port": 22, "password": "ClearPassword!"},
+            }
+        ]
     }
-    res = api_client.post("/api/v1/search/semantic", json=search_payload)
+    raw_body = json.dumps(event_payload).encode("utf-8")
+    sig = compute_hmac_signature(raw_body, HMAC_SECRET)
+
+    headers = {
+        "X-API-Key": API_KEY,
+        "X-HMAC-Signature": sig,
+        "Content-Type": "application/json",
+    }
+    res = api_client.post("/api/v1/telemetry/ingest", content=raw_body, headers=headers)
+    assert res.status_code == status.HTTP_202_ACCEPTED
+    data = res.json()
+    assert data["status"] == "accepted"
+    assert data["accepted_count"] == 1
+
+
+def test_api_demo_analyze_endpoint(api_client):
+    """Tests the /api/v1/demo/analyze-ml interactive inspection endpoint."""
+    payload = {
+        "agent_id": "probe-demo-01",
+        "event_type": "SQL_INJECTION_ATTEMPT",
+        "source_ip": "197.14.88.22",
+        "destination_ip": "10.0.0.5",
+        "severity": "MEDIUM",
+        "payload": {
+            "query": "SELECT * FROM users WHERE username='admin' AND '1'='1' --",
+            "password": "SecretPassword123!",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.t-IDNbu3rqL0xWNWymPNph6JwUKoWjyAfFD0Mgcvda0",
+        },
+    }
+    res = api_client.post("/api/v1/demo/analyze-ml", json=payload)
     assert res.status_code == status.HTTP_200_OK
     data = res.json()
-    assert "results" in data
-    assert data["total_matches"] >= 0
-    assert "execution_time_ms" in data
+    assert data["status"] == "success"
+    assert data["sanitized_payload"]["password"] == "***REDACTED***"
+    assert data["sanitized_payload"]["token"] == "***REDACTED***"
+    assert "entropy_score" in data
+    assert "threat_score" in data
+    assert "features" in data
+    assert len(data["features"]) == 7
 
 
-def test_api_lead_qualification_flow(api_client):
-    """Verifies RFQ submission and scoring via API."""
-    lead_payload = {
-        "contact_name": "Ing. Yassine Triki",
-        "company_name": "Société Industrielle du Sud",
-        "email": "yassine.triki@industrie-sud.tn",
-        "phone": "+216 74 999 888",
-        "client_type": "INDUSTRY",
-        "domain_interest": "FIRE_DETECTION",
-        "project_description": "Mise aux normes incendie EN54 urgente pour notre usine de 3000m2 suite à inspection.",
-        "urgency": "IMMEDIATE_MISSION_CRITICAL",
-        "surface_m2": 3000.0,
-        "estimated_budget_tnd": 28000.0,
-    }
-    res = api_client.post("/api/v1/leads/qualify", json=lead_payload)
-    assert res.status_code == status.HTTP_201_CREATED
+def test_api_demo_burst_benchmark(api_client):
+    """Tests the /api/v1/demo/burst-inject benchmark endpoint."""
+    res = api_client.post("/api/v1/demo/burst-inject", json={"burst_size": 500})
+    assert res.status_code == status.HTTP_200_OK
     data = res.json()
-    assert "lead_id" in data
-    assert data["opportunity_score"] > 60.0
-    assert "breakdown" in data
-    assert data["qualification_tier"] in ("TIER_1_ENTERPRISE_VIP", "TIER_2_QUALIFIED")
-
-
-def test_api_validation_error_boundaries(api_client):
-    """Ensures malformed payload returns HTTP 422 Unprocessable Entity."""
-    bad_payload = {
-        "contact_name": "",  # Too short
-        "email": "invalid-email",
-        "phone": "123",
-        "client_type": "UNKNOWN_TYPE",
-    }
-    res = api_client.post("/api/v1/leads/qualify", json=bad_payload)
-    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert data["status"] == "completed"
+    assert data["burst_size"] == 500
+    assert "overall_throughput_eps" in data
+    assert "p50_latency_ms" in data

@@ -1,4 +1,8 @@
 """
-Shield Technology - Telemetry & Security Intelligence Ingestion Pipeline.
+Shield Technology Security Telemetry & AI Platform.
+Clean Architecture Layered Package.
 """
-__version__ = "2.4.0"
+
+from app.api.main import app
+
+__all__ = ["app"]

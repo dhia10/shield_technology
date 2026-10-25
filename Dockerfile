@@ -34,10 +34,6 @@ COPY --from=builder /root/.local /home/appuser/.local
 
 # Copy application sources
 COPY --chown=appuser:appgroup app/ /app/app/
-COPY --chown=appuser:appgroup domain/ /app/domain/
-COPY --chown=appuser:appgroup services/ /app/services/
-COPY --chown=appuser:appgroup api/ /app/api/
-COPY --chown=appuser:appgroup infrastructure/ /app/infrastructure/
 COPY --chown=appuser:appgroup scripts/ /app/scripts/
 COPY --chown=appuser:appgroup static/ /app/static/
 COPY --chown=appuser:appgroup pyproject.toml /app/
